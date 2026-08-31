@@ -117,6 +117,7 @@ from .planning import (
     normalize_story_plan,
     pick_detail_segment,
 )
+from .proactive_decision_policy import proactive_item_freshness_class, proactive_timeliness_level
 from .proactive_routes import PROACTIVE_ROUTE_REGISTRY
 from .persona_config import runtime_persona_setting
 from .logging_util import get_module_logger
@@ -2862,41 +2863,13 @@ class ProactiveEngineMixin:
         source: str,
         semantic_kind: str = "",
     ) -> str:
-        normalized_reason = self._normalize_legacy_proactive_text(reason, limit=40)
-        normalized_source = self._normalize_legacy_proactive_text(source, limit=40)
-        normalized_kind = self._normalize_legacy_proactive_text(semantic_kind, limit=40)
-        if normalized_reason in {"environment_change", "weather_alert", "health_alert", "memo_note_reminder"} or normalized_source in {
-            "environment_change",
-            "weather_alert",
-            "body_monitor",
-            "memo_note",
-        }:
-            return "immediate"
-        if normalized_source == "timer" or normalized_reason in {
-            "birthday_eve_hint",
-            "birthday_celebration",
-            "birthday_makeup",
-            "birthday_afterglow",
-            "important_date_share",
-            "special_day_greeting",
-            "bili_video_share",
-            "news_share",
-            "web_exploration_share",
-            "creative_share",
-        }:
-            return "durable"
-        action_parts = {part.strip() for part in str(action or "").split("+") if part.strip()}
-        if {"photo_text", "screen_peek"} & action_parts:
-            return "immediate"
-        if normalized_kind in {"self_share", "observation"} and normalized_source in {
-            "story",
-            "daily_story",
-            "state",
-            "event",
-            "simulation",
-        }:
-            return "immediate"
-        return "contextual"
+        return proactive_item_freshness_class(
+            action=action,
+            reason=reason,
+            source=source,
+            semantic_kind=semantic_kind,
+            normalize=self._normalize_legacy_proactive_text,
+        )
 
     def _proactive_timeliness_level(
         self,
@@ -2904,29 +2877,11 @@ class ProactiveEngineMixin:
         reason: Any = "",
         source: Any = "",
     ) -> str:
-        """Classify only events whose value materially decays within minutes."""
-
-        normalized_reason = self._normalize_legacy_proactive_text(reason, limit=40)
-        normalized_source = self._normalize_legacy_proactive_text(source, limit=40)
-        if normalized_reason in {"weather_alert", "health_alert"} or normalized_source in {
-            "weather_alert",
-            "body_monitor",
-        }:
-            return "urgent"
-        if normalized_reason in {
-            "environment_change",
-            "memo_note_reminder",
-            "birthday_celebration",
-            "special_day_greeting",
-            "insomnia_night",
-        } or normalized_source in {
-            "environment_change",
-            "memo_note",
-            "special_day_ritual",
-            "night_care",
-        }:
-            return "timely"
-        return "routine"
+        return proactive_timeliness_level(
+            reason=reason,
+            source=source,
+            normalize=self._normalize_legacy_proactive_text,
+        )
 
     @staticmethod
     def _proactive_timeliness_rank(level: Any) -> int:
