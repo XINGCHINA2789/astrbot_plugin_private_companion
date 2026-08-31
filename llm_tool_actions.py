@@ -8130,7 +8130,9 @@ class LlmToolActionsMixin:
         hint = query.hint
         hours = query.hours
         limit = query.limit
+
         return await execute_interaction_query(self, event, query)
+
 
     async def _pc_get_group_id_by_name_impl(self, event: AstrMessageEvent, **kwargs) -> str:
         if not self.enable_atrelay_tools:
