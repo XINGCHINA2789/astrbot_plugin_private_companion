@@ -22,6 +22,8 @@ logger = get_module_logger(__name__)
 _SCHEMA_VERSION = 2
 _SQLITE_INTEGER_MAX = (1 << 63) - 1
 _MAX_SECTION_REVISION = _SQLITE_INTEGER_MAX - 1
+# Stay below SQLite builds that retain the historical 999-variable limit.
+_SQLITE_QUERY_BATCH_SIZE = 900
 _SECTION_COLUMNS = (
     "section_name",
     "payload_json",
@@ -994,19 +996,32 @@ class SqliteStoreBackend(StoreBackendBase):
                 connection.execute("BEGIN IMMEDIATE")
                 metadata = self._metadata(connection)
                 next_revision = self._metadata_integer(metadata, "next_revision")
-                persisted: dict[str, tuple[str, int, int] | None] = {}
-                for name in sorted(prepared):
-                    row = connection.execute(
-                        "SELECT payload_json,checksum,revision,is_deleted "
-                        "FROM store_sections WHERE section_name=?",
-                        (name,),
-                    ).fetchone()
-                    if row is None:
-                        persisted[name] = None
-                        continue
-                    stored_payload, stored_checksum, stored_revision, stored_deleted = (
-                        row
+                # Read the complete batch in one indexed query.  The old point-query
+                # loop caused one B-tree traversal (and potentially one HDD seek) per
+                # section in otherwise atomic multi-section saves.
+                prepared_order = sorted(prepared)
+                existing_rows: list[tuple[Any, ...]] = []
+                for offset in range(0, len(prepared_order), _SQLITE_QUERY_BATCH_SIZE):
+                    batch = prepared_order[offset : offset + _SQLITE_QUERY_BATCH_SIZE]
+                    placeholders = ",".join("?" for _ in batch)
+                    existing_rows.extend(
+                        connection.execute(
+                            "SELECT section_name,payload_json,checksum,revision,is_deleted "
+                            f"FROM store_sections WHERE section_name IN ({placeholders})",
+                            batch,
+                        ).fetchall()
                     )
+                persisted: dict[str, tuple[str, int, int] | None] = {
+                    name: None for name in prepared_order
+                }
+                for (
+                    raw_name,
+                    stored_payload,
+                    stored_checksum,
+                    stored_revision,
+                    stored_deleted,
+                ) in existing_rows:
+                    name = str(raw_name)
                     persisted[name] = (
                         str(stored_checksum),
                         int(stored_revision),
@@ -1060,13 +1075,23 @@ class SqliteStoreBackend(StoreBackendBase):
                             is_deleted,
                         ),
                     )
-                connection.execute(
-                    "UPDATE store_meta SET meta_value='1' WHERE meta_key='initialized'"
+                # Avoid dirtying the metadata pages for idempotent retries.  This
+                # matters on rotational disks because even a no-op logical save used
+                # to append WAL frames and force a commit path.
+                if metadata.get("initialized") != "1":
+                    connection.execute(
+                        "UPDATE store_meta SET meta_value='1' "
+                        "WHERE meta_key='initialized'"
+                    )
+                target_next_revision = max(
+                    next_revision, max(confirmed.values()) + 1
                 )
-                connection.execute(
-                    "UPDATE store_meta SET meta_value=? WHERE meta_key='next_revision'",
-                    (str(max(next_revision, max(confirmed.values()) + 1)),),
-                )
+                if target_next_revision != next_revision:
+                    connection.execute(
+                        "UPDATE store_meta SET meta_value=? "
+                        "WHERE meta_key='next_revision'",
+                        (str(target_next_revision),),
+                    )
                 connection.commit()
                 return confirmed
             except Exception:
@@ -1114,14 +1139,17 @@ class SqliteStoreBackend(StoreBackendBase):
         with self._schema_lock:
             connection = self._connect()
             try:
-                for name in names:
-                    row = connection.execute(
-                        "SELECT revision FROM store_sections "
-                        "WHERE section_name=? AND is_deleted=1",
-                        (name,),
-                    ).fetchone()
-                    if row is not None:
-                        result[name] = int(row[0])
+                for offset in range(0, len(names), _SQLITE_QUERY_BATCH_SIZE):
+                    batch = names[offset : offset + _SQLITE_QUERY_BATCH_SIZE]
+                    placeholders = ",".join("?" for _ in batch)
+                    rows = connection.execute(
+                        "SELECT section_name,revision FROM store_sections "
+                        f"WHERE is_deleted=1 AND section_name IN ({placeholders})",
+                        batch,
+                    )
+                    result.update(
+                        (str(name), int(revision)) for name, revision in rows
+                    )
             finally:
                 connection.close()
         return result
