@@ -17,6 +17,13 @@ from astrbot.api.event import AstrMessageEvent
 
 from .constants import DEFAULT_NATURAL_LANGUAGE_PHOTO_EXTRA_PROMPT
 from .helpers import _flat_get, _missing_optional_model_dependency, _now_ts, _path_text, _photo_group_request_matches, _safe_float, _safe_int, _set_into_config, _single_line, _today_key
+from .group_command_system import (
+    GROUP_COMMAND_HELP,
+    GroupLLMAction,
+    format_llm_blocked,
+    format_llm_status,
+    parse_group_command,
+)
 from .photo_generation_scope import PHOTO_GENERATION_SCOPE_LIMIT_KEYS
 from .photo_reference_catalog import (
     CATALOG_VERSION,
@@ -5782,103 +5789,74 @@ class CommandHandlersMixin:
         event.stop_event()
         return True
 
+    async def _group_command_management_allowed(
+        self, event: AstrMessageEvent, group_id: str, *, refresh_role: bool = False
+    ) -> bool:
+        if self._can_manage_group_companion(event):
+            return True
+        if not refresh_role:
+            return False
+        refresher = getattr(self, "_refresh_group_role_snapshot", None)
+        if callable(refresher):
+            try:
+                await refresher(event, group_id, force=False)
+            except Exception as exc:
+                logger.debug(
+                    "刷新群权限快照失败: group=%s error=%s",
+                    _single_line(group_id, 80),
+                    _single_line(exc, 160),
+                )
+        return self._can_manage_group_companion(event)
+
+    @staticmethod
+    def _group_command_operator_id(event: AstrMessageEvent) -> str:
+        try:
+            return str(event.get_sender_id())
+        except (AttributeError, TypeError, ValueError):
+            return ""
+
+    async def _execute_group_llm_action(
+        self, event: AstrMessageEvent, group_id: str, action: GroupLLMAction
+    ) -> str:
+        operator_id = self._group_command_operator_id(event)
+        async with self._data_lock:
+            if action is GroupLLMAction.BLOCK:
+                item = self._set_group_llm_reply_block(
+                    group_id, True, operator_id=operator_id, reason="group_command"
+                )
+                self._save_data_sync(sections={"group_llm_reply_blocks"})
+                elapsed = (
+                    self._format_timestamp_elapsed(_safe_float(item.get("updated_at"), 0.0, 0.0))
+                    if item else "刚刚"
+                )
+                return format_llm_blocked(group_id, elapsed)
+            if action is GroupLLMAction.RESTORE:
+                self._set_group_llm_reply_block(
+                    group_id, False, operator_id=operator_id, reason="group_command"
+                )
+                self._save_data_sync(sections={"group_llm_reply_blocks"})
+                return "已恢复本群 LLM 回复。"
+            item = self._group_llm_reply_block_item(group_id)
+            blocked = bool(item.get("enabled"))
+            elapsed = (
+                self._format_timestamp_elapsed(_safe_float(item.get("updated_at"), 0.0, 0.0))
+                if blocked else ""
+            )
+            return format_llm_status(blocked=blocked, elapsed=elapsed)
+
     async def _group_companion_command_impl(self, event: AstrMessageEvent):
         group_id = self._extract_group_id_from_event(event)
         if not group_id:
             yield event.plain_result("这条命令需要在群聊里使用。")
             return
-        message = str(event.message_str or "").strip()
-        action = ""
+        request = parse_group_command(event.message_str)
+        action = request.action
         response_chain = None
-        parts = message.split(maxsplit=2)
-        if len(parts) >= 2:
-            action = parts[1].strip()
-        value = parts[2].strip() if len(parts) >= 3 else ""
-        action_compact = re.sub(r"\s+", "", f"{action}{value}").lower()
-        llm_block_on = action_compact in {
-            "关闭llm",
-            "关闭llm回复",
-            "关闭所有llm回复",
-            "禁用llm",
-            "禁用llm回复",
-            "停用llm",
-            "停用llm回复",
-            "禁止llm",
-            "禁止llm回复",
-            "关闭主链",
-            "关闭主链回复",
-        }
-        llm_block_off = action_compact in {
-            "开启llm",
-            "开启llm回复",
-            "开启所有llm回复",
-            "启用llm",
-            "启用llm回复",
-            "打开llm",
-            "打开llm回复",
-            "恢复llm",
-            "恢复llm回复",
-            "恢复主链",
-            "恢复主链回复",
-        }
-        llm_block_status = action_compact in {"llm状态", "主链状态", "llm回复状态"}
-        if llm_block_on or llm_block_off or llm_block_status:
-            authorized = self._can_manage_group_companion(event)
-            if not authorized:
-                # Some adapters omit sender.role. Refresh the group member snapshot
-                # before denying a real group owner/admin whose cache has expired.
-                refresher = getattr(self, "_refresh_group_role_snapshot", None)
-                if callable(refresher):
-                    try:
-                        await refresher(event, group_id, force=False)
-                    except Exception as exc:
-                        logger.debug(
-                            "刷新群权限快照失败: group=%s error=%s",
-                            _single_line(group_id, 80),
-                            _single_line(exc, 160),
-                        )
-                    authorized = self._can_manage_group_companion(event)
-            if not authorized:
+        if request.llm_action is not None:
+            if not await self._group_command_management_allowed(event, group_id, refresh_role=True):
                 yield event.plain_result(self._management_denied_text())
                 return
-        if llm_block_on or llm_block_off or llm_block_status:
-            operator_id = ""
-            try:
-                operator_id = str(event.get_sender_id())
-            except Exception:
-                operator_id = ""
-            async with self._data_lock:
-                if llm_block_on:
-                    item = self._set_group_llm_reply_block(
-                        group_id,
-                        True,
-                        operator_id=operator_id,
-                        reason="group_command",
-                    )
-                    self._save_data_sync(sections={"group_llm_reply_blocks"})
-                    ts_text = self._format_timestamp_elapsed(_safe_float(item.get("updated_at"), 0.0, 0.0)) if item else "刚刚"
-                    response = (
-                        "已关闭本群所有 LLM 回复。\n"
-                        f"群号：{group_id}\n"
-                        f"状态：拦截中（{ts_text}）\n"
-                        "恢复：陪伴群 开启LLM"
-                    )
-                elif llm_block_off:
-                    self._set_group_llm_reply_block(
-                        group_id,
-                        False,
-                        operator_id=operator_id,
-                        reason="group_command",
-                    )
-                    self._save_data_sync(sections={"group_llm_reply_blocks"})
-                    response = "已恢复本群 LLM 回复。"
-                else:
-                    item = self._group_llm_reply_block_item(group_id)
-                    if bool(item.get("enabled")):
-                        ts_text = self._format_timestamp_elapsed(_safe_float(item.get("updated_at"), 0.0, 0.0))
-                        response = f"本群 LLM 回复当前关闭中，开启时间：{ts_text}。\n恢复：陪伴群 开启LLM"
-                    else:
-                        response = "本群 LLM 回复当前未被单独关闭。"
+            response = await self._execute_group_llm_action(event, group_id, request.llm_action)
             yield event.plain_result(response)
             event.stop_event()
             return
@@ -5897,7 +5875,7 @@ class CommandHandlersMixin:
             else:
                 yield event.plain_result("这个群暂时不启用群聊陪伴。")
             return
-        if action in {"开启", "启用", "打开", "关闭", "停用", "关掉", "撤回消息", "防撤回", "转述撤回", "撤回转述"} and not self._can_manage_group_companion(event):
+        if request.requires_management and not await self._group_command_management_allowed(event, group_id):
             yield event.plain_result(self._management_denied_text())
             return
         async with self._data_lock:
@@ -5975,22 +5953,7 @@ class CommandHandlersMixin:
             elif action in {"状态", "气氛", ""}:
                 response = self._format_group_status(group)
             else:
-                response = (
-                    "群聊陪伴命令：\n"
-                    "陪伴群 状态\n"
-                    "陪伴群 黑话\n"
-                    "陪伴群 群友\n"
-                    "陪伴群 话题\n"
-                    "陪伴群 片段\n"
-                    "陪伴群 插话反馈\n"
-                    "陪伴群 关系网\n"
-                    "陪伴群 撤回消息\n"
-                    "陪伴群 LLM状态\n"
-                    "陪伴群 关闭LLM\n"
-                    "陪伴群 开启LLM\n"
-                    "陪伴群 开启\n"
-                    "陪伴群 关闭"
-                )
+                response = GROUP_COMMAND_HELP
         if response_chain:
             yield event.chain_result(response_chain)
         else:
