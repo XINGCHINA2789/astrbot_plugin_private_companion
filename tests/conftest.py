@@ -17,6 +17,36 @@ import pytest
 
 PACKAGE_NAME = "astrbot_plugin_private_companion"
 PLUGIN_ROOT = Path(__file__).resolve().parents[1]
+TESTS_ROOT = Path(__file__).resolve().parent
+if str(TESTS_ROOT) not in sys.path:
+    sys.path.insert(0, str(TESTS_ROOT))
+
+
+def pytest_addoption(parser):
+    parser.addoption(
+        "--memory-plugin-root",
+        action="store",
+        default=None,
+        metavar="PATH",
+        help=(
+            "path to a real memory companion checkout for cross-plugin integration "
+            "contracts (also configurable with ASTRBOT_MEMORY_PLUGIN_ROOT)"
+        ),
+    )
+
+
+@pytest.fixture(scope="session")
+def memory_plugin_root(pytestconfig):
+    """Return the real optional integration dependency, or skip its tests clearly."""
+    from external_memory_dependency import resolve_memory_plugin_root
+
+    resolution = resolve_memory_plugin_root(
+        PLUGIN_ROOT,
+        configured_root=pytestconfig.getoption("--memory-plugin-root"),
+    )
+    if resolution.root is None:
+        pytest.skip(resolution.detail)
+    return resolution.root
 
 
 # Load the real package before legacy unit tests get a chance to install
@@ -136,6 +166,11 @@ def pytest_runtest_setup(item):
 
 
 def pytest_configure(config):
+    configured_memory_root = config.getoption("--memory-plugin-root")
+    if configured_memory_root:
+        # Collection-time integration modules cannot consume fixtures, so expose
+        # the command-line value through the same resolver input they use.
+        os.environ["ASTRBOT_MEMORY_PLUGIN_ROOT"] = configured_memory_root
     config.addinivalue_line(
         "markers",
         "asyncio: run this coroutine test in an event loop",

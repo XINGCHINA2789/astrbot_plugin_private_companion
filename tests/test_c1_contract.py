@@ -2,23 +2,23 @@ from __future__ import annotations
 
 import hashlib
 import importlib.util
-import os
 from pathlib import Path
+
+import pytest
 
 
 COMPANION_ROOT = Path(__file__).resolve().parents[1]
 PEIBAN_ROOT = COMPANION_ROOT.parents[1]
 CONTRACT_PATH = COMPANION_ROOT / "bot_personal_contract.py"
-_MEMORY_CONTRACT_CANDIDATES = (
-    Path(os.environ["ASTRBOT_MEMORY_PLUGIN_ROOT"]) / "core" / "bot_personal_contract.py"
-    if os.environ.get("ASTRBOT_MEMORY_PLUGIN_ROOT")
-    else COMPANION_ROOT / ".missing-memory-root" / "core" / "bot_personal_contract.py",
-    COMPANION_ROOT.parent / "memory" / "core" / "bot_personal_contract.py",
-    PEIBAN_ROOT / "astrbot_plugin_memory_companion-main" / "core" / "bot_personal_contract.py",
-    COMPANION_ROOT.parent / "astrbot_plugin_remember_you" / "core" / "bot_personal_contract.py",
-    COMPANION_ROOT.parent / "我会牢牢记住你" / "core" / "bot_personal_contract.py",
-)
-MEMORY_CONTRACT_PATH = next((path for path in _MEMORY_CONTRACT_CANDIDATES if path.is_file()), _MEMORY_CONTRACT_CANDIDATES[0])
+from external_memory_dependency import resolve_memory_plugin_root
+
+
+_memory_resolution = resolve_memory_plugin_root(COMPANION_ROOT)
+if _memory_resolution.root is None:
+    pytest.skip(_memory_resolution.detail, allow_module_level=True)
+MEMORY_ROOT = _memory_resolution.root
+MEMORY_CONTRACT_PATH = MEMORY_ROOT / "core" / "bot_personal_contract.py"
+
 _SHARED_CONTRACT_CANDIDATES = (
     PEIBAN_ROOT / "doc" / "shared" / "bot_personal_contract.py",
     MEMORY_CONTRACT_PATH,
