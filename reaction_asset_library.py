@@ -16,6 +16,7 @@ from pathlib import Path
 from typing import Any, Iterable
 
 from .helpers import _safe_float, _safe_int, _single_line
+from .reaction_asset_usage import ReactionAssetUsageStore
 
 
 CATALOG_VERSION = 2
@@ -167,6 +168,7 @@ class ReactionAssetLibrary:
         self.root = (Path(data_dir) / "reaction_expression_library").resolve()
         self.images_dir = self.root / "images"
         self.catalog_path = self.root / "catalog.json"
+        self._usage = ReactionAssetUsageStore(self.root)
         self._lock = threading.RLock()
         self._lookup_revision_stamp: tuple[int, int, int, int] | None = None
         self._lookup_revision_value = ""
@@ -201,6 +203,10 @@ class ReactionAssetLibrary:
 
     def _load(self) -> dict[str, Any]:
         if not self.catalog_path.is_file():
+            self._cached_catalog = None
+            self._cached_catalog_stamp = None
+            self._cached_summary = None
+            self._cached_has_enabled_assets = False
             return self._empty_catalog()
         current_stamp = self._catalog_cache_stamp()
         if self._cached_catalog is not None and current_stamp == self._cached_catalog_stamp:
@@ -240,6 +246,12 @@ class ReactionAssetLibrary:
                 item["manual_fields"] = manual_fields
                 item["analysis_status"] = "unprocessed"
             migrated_items.append(item)
+        usage = self._usage.load()
+        for item in migrated_items:
+            record = usage.get(str(item.get("id") or ""))
+            if record:
+                item["usage_count"] = record["usage_count"]
+                item["last_used_at"] = record["last_used_at"]
         raw["version"] = CATALOG_VERSION
         raw["items"] = migrated_items
         # Update memory cache.
@@ -370,13 +382,10 @@ class ReactionAssetLibrary:
             return 0, 0
 
     def has_enabled_assets(self) -> bool:
-        # Use the lightweight flag updated by _save(), _load(), and lookup_revision().
-        # This avoids a full catalog walk on the every-normal-reply hot path.
+        """Return availability through the same TTL-bound revision probe as lookup."""
         with self._lock:
-            # Ensure catalog is loaded before checking the flag.
-            if self._cached_catalog is None:
-                self._load()
-            return bool(self._cached_has_enabled_assets)
+            self.lookup_revision()
+            return bool(self._lookup_has_enabled_assets)
 
     def lookup_revision(self) -> str:
         """Return a stable revision for fields that affect runtime matching.
@@ -394,13 +403,11 @@ class ReactionAssetLibrary:
                 return self._lookup_revision_value
 
             stamp = self._lookup_source_stamp()
-            if (
-                self._lookup_revision_stamp == stamp
-                and self._lookup_revision_value
-            ):
-                self._lookup_revision_checked_at = now
-                return self._lookup_revision_value
-
+            if stamp != self._lookup_revision_stamp:
+                self._cached_summary = None
+            # A directory timestamp is only a cheap invalidation hint. Some
+            # filesystems do not advance it for every child deletion, so every
+            # probe after the TTL rebuilds the small file-presence index.
             items = [self._normalize_item(raw) for raw in self._load()["items"]]
             rows: list[dict[str, Any]] = []
             has_enabled_assets = False
@@ -437,6 +444,8 @@ class ReactionAssetLibrary:
                 separators=(",", ":"),
             )
             revision = hashlib.sha256(payload.encode("utf-8")).hexdigest()[:24]
+            if self._lookup_revision_value and revision != self._lookup_revision_value:
+                self._cached_summary = None
             self._lookup_revision_stamp = stamp
             self._lookup_revision_value = revision
             self._lookup_has_enabled_assets = has_enabled_assets
@@ -452,6 +461,7 @@ class ReactionAssetLibrary:
 
     def summary(self) -> dict[str, Any]:
         with self._lock:
+            self.lookup_revision()
             if self._cached_summary is not None:
                 return self._cached_summary
             items = [self._normalize_item(item) for item in self._load()["items"]]
@@ -1409,7 +1419,15 @@ class ReactionAssetLibrary:
                 changed = True
                 break
             if changed:
-                self._save(catalog, lookup_changed=False)
+                self._usage.mark_used(
+                    item_key,
+                    baseline_count=max(0, item["usage_count"] - 1),
+                    used_at=item["last_used_at"],
+                )
+                self._cached_summary = None
+                path = self._path_for(item)
+                if path is None or not path.is_file():
+                    self._lookup_revision_checked_at = 0.0
                 self._selection_revision += 1
             return changed
 
