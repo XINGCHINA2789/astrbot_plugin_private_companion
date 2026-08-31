@@ -10,6 +10,7 @@ import os
 import sys
 import types
 from pathlib import Path
+from typing import Iterator
 
 import pytest
 
@@ -87,6 +88,51 @@ if os.environ.get("ASTRBOT_CI_STUBS") == "1" and "astrbot" not in sys.modules:
 
 
 _HAS_PYTEST_ASYNCIO = importlib.util.find_spec("pytest_asyncio") is not None
+_MISSING = object()
+
+
+def _restore_process_state(
+    modules_before: dict[str, types.ModuleType | None],
+    environ_before: dict[str, str],
+) -> None:
+    for name in tuple(sys.modules):
+        if name not in modules_before:
+            sys.modules.pop(name, None)
+    for name, module in modules_before.items():
+        if sys.modules.get(name, _MISSING) is not module:
+            sys.modules[name] = module
+
+    os.environ.clear()
+    os.environ.update(environ_before)
+    importlib.invalidate_caches()
+
+
+@pytest.fixture(autouse=True)
+def isolate_process_state() -> Iterator[None]:
+    """Restore process-wide state changed by legacy import-style tests.
+
+    A number of tests load modules under synthetic package names or temporarily
+    replace AstrBot modules.  ``mock.patch.dict`` restores the keys it was given,
+    but imported child modules and direct assignments otherwise survive into the
+    next test.  Snapshot both module identities and the environment so every test
+    starts from the same real AstrBot process state.
+    """
+    modules_before = dict(sys.modules)
+    environ_before = dict(os.environ)
+    yield
+
+    _restore_process_state(modules_before, environ_before)
+
+
+def pytest_runtest_teardown(item, nextitem):
+    """Run after all fixture finalizers, including user monkeypatch fixtures."""
+    snapshot = getattr(item, "_process_state_snapshot", None)
+    if snapshot is not None:
+        _restore_process_state(*snapshot)
+
+
+def pytest_runtest_setup(item):
+    item._process_state_snapshot = (dict(sys.modules), dict(os.environ))
 
 
 def pytest_configure(config):
