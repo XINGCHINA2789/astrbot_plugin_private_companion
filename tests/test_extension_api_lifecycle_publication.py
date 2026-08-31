@@ -15,7 +15,7 @@ from astrbot_plugin_private_companion.storage.json_backend import JsonStoreBacke
 from astrbot_plugin_private_companion.storage.path_generation import (
     activate_persistence_owner,
 )
-from astrbot_plugin_private_companion.private_companion_lifecycle_refactor.plugin_lifecycle import (
+from astrbot_plugin_private_companion.plugin_lifecycle import (
     assemble_plugin_dependencies,
     cancel_registered_host_tasks,
     close_early_resources,
