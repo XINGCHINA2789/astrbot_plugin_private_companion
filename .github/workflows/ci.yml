@@ -58,6 +58,10 @@ jobs:
           python scripts/ci_static_checks.py
           --package astrbot_plugin_private_companion
           --import-module story_migration_contract
+      - name: Enforce structural quality baseline budget
+        run: python scripts/quality_budget.py --baseline quality-baseline.json
+      - name: Regression-test the quality checker
+        run: python -m unittest discover -s tests -p "test_quality_budget.py"
       - name: Check patch whitespace
         shell: bash
         run: |
