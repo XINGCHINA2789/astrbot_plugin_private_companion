@@ -8073,7 +8073,6 @@ class PrivateCompanionPlugin(
 
     async def terminate(self):
         global _private_companion_plugin
-<<<<<<< HEAD
         lab_fixture_adapter = getattr(self, "_lab_fixture_adapter", None)
         close_lab_fixture = getattr(lab_fixture_adapter, "close", None)
         if callable(close_lab_fixture):
@@ -8105,7 +8104,6 @@ class PrivateCompanionPlugin(
         cleanup_delivery_caches = getattr(self, "_cleanup_framework_delivery_caches", None)
         if callable(cleanup_delivery_caches):
             cleanup_delivery_caches(force=True)
-=======
         await close_early_resources(self)
         await self._cancel_lifecycle_background_tasks()
         invalidate_bridge = getattr(self, "_memory_companion_invalidate_bridge_cache", None)
