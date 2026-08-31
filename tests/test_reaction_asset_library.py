@@ -461,6 +461,15 @@ class ReactionAssetLibraryTests(unittest.TestCase):
         self.assertEqual(1, persisted["usage_count"])
         self.assertGreater(persisted["last_used_at"], 0)
 
+    def test_delete_removes_usage_sidecar_record(self) -> None:
+        item = self.library.import_blobs([("开心.png", PNG_BYTES)])["items"][0]
+        self.assertTrue(self.library.mark_used(item["id"]))
+        self.assertIsNotNone(self.library._usage.get(item["id"]))
+
+        self.assertEqual(1, self.library.delete_items([item["id"]])["deleted"])
+
+        self.assertIsNone(self.library._usage.get(item["id"]))
+
     def test_rescan_reports_duplicates_and_delete_keeps_locked_item(self) -> None:
         item = self.library.import_blobs([("已有.png", PNG_BYTES)])["items"][0]
         duplicate_path = self.library.images_dir / "目录重复.png"

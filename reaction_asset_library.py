@@ -1098,6 +1098,7 @@ class ReactionAssetLibrary:
             if removed:
                 catalog["items"] = kept
                 self._save(catalog)
+                self._usage.delete(set(removed))
         return {
             "deleted": len(removed),
             "ids": removed,
