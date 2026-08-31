@@ -1,0 +1,3951 @@
+{
+  "added_modules": [],
+  "base": "1db3748797844abe42d057a354cf79c4df732c5c",
+  "candidate": "43de95d7292b5f71b70f9c183d057d68c8199de3",
+  "cross_domain_dependencies": [],
+  "cycle_sccs": [
+    [
+      "agenda_contracts",
+      "calendar_contracts",
+      "companion.contracts.calendar_contracts"
+    ]
+  ],
+  "edges": [
+    {
+      "line": 9,
+      "source": "activity_capture",
+      "target": "agenda_contracts"
+    },
+    {
+      "line": 11,
+      "source": "activity_capture",
+      "target": "agenda_contracts"
+    },
+    {
+      "line": 4,
+      "source": "affect_modulation",
+      "target": "domains.affect.affect_modulation"
+    },
+    {
+      "line": 6,
+      "source": "affect_modulation",
+      "target": "domains.affect.affect_modulation"
+    },
+    {
+      "line": 19,
+      "source": "agenda_contracts",
+      "target": "bot_personal_contract"
+    },
+    {
+      "line": 26,
+      "source": "agenda_contracts",
+      "target": "bot_personal_contract"
+    },
+    {
+      "line": 1049,
+      "source": "agenda_contracts",
+      "target": "calendar_contracts"
+    },
+    {
+      "line": 1051,
+      "source": "agenda_contracts",
+      "target": "calendar_contracts"
+    },
+    {
+      "line": 105,
+      "source": "agenda_contracts",
+      "target": "schedule_authority"
+    },
+    {
+      "line": 113,
+      "source": "agenda_contracts",
+      "target": "schedule_authority"
+    },
+    {
+      "line": 5,
+      "source": "agenda_disclosure",
+      "target": "agenda_disclosure_policy"
+    },
+    {
+      "line": 7,
+      "source": "agenda_disclosure",
+      "target": "agenda_disclosure_policy"
+    },
+    {
+      "line": 22,
+      "source": "agenda_disclosure_policy",
+      "target": "agenda_contracts"
+    },
+    {
+      "line": 49,
+      "source": "agenda_disclosure_policy",
+      "target": "agenda_contracts"
+    },
+    {
+      "line": 21,
+      "source": "agenda_disclosure_policy",
+      "target": "bot_personal_contract"
+    },
+    {
+      "line": 48,
+      "source": "agenda_disclosure_policy",
+      "target": "bot_personal_contract"
+    },
+    {
+      "line": 16,
+      "source": "agenda_disclosure_policy",
+      "target": "schedule_authority"
+    },
+    {
+      "line": 18,
+      "source": "agenda_disclosure_policy",
+      "target": "schedule_authority"
+    },
+    {
+      "line": 10,
+      "source": "agenda_runtime",
+      "target": "activity_capture"
+    },
+    {
+      "line": 36,
+      "source": "agenda_runtime",
+      "target": "activity_capture"
+    },
+    {
+      "line": 11,
+      "source": "agenda_runtime",
+      "target": "agenda_contracts"
+    },
+    {
+      "line": 37,
+      "source": "agenda_runtime",
+      "target": "agenda_contracts"
+    },
+    {
+      "line": 33,
+      "source": "agenda_runtime",
+      "target": "agenda_disclosure_policy"
+    },
+    {
+      "line": 59,
+      "source": "agenda_runtime",
+      "target": "agenda_disclosure_policy"
+    },
+    {
+      "line": 23,
+      "source": "agenda_runtime",
+      "target": "calendar_contracts"
+    },
+    {
+      "line": 49,
+      "source": "agenda_runtime",
+      "target": "calendar_contracts"
+    },
+    {
+      "line": 30,
+      "source": "agenda_runtime",
+      "target": "calendar_observer"
+    },
+    {
+      "line": 56,
+      "source": "agenda_runtime",
+      "target": "calendar_observer"
+    },
+    {
+      "line": 34,
+      "source": "agenda_runtime",
+      "target": "runtime_scene_resolver"
+    },
+    {
+      "line": 60,
+      "source": "agenda_runtime",
+      "target": "runtime_scene_resolver"
+    },
+    {
+      "line": 31,
+      "source": "agenda_runtime",
+      "target": "schedule_reconciler"
+    },
+    {
+      "line": 57,
+      "source": "agenda_runtime",
+      "target": "schedule_reconciler"
+    },
+    {
+      "line": 32,
+      "source": "agenda_runtime",
+      "target": "unified_agenda"
+    },
+    {
+      "line": 58,
+      "source": "agenda_runtime",
+      "target": "unified_agenda"
+    },
+    {
+      "line": 13,
+      "source": "astrbot_knowledge",
+      "target": "helpers"
+    },
+    {
+      "line": 16,
+      "source": "astrbot_knowledge",
+      "target": "logging_util"
+    },
+    {
+      "line": 14,
+      "source": "astrbot_knowledge",
+      "target": "persona_config"
+    },
+    {
+      "line": 15,
+      "source": "astrbot_knowledge",
+      "target": "reference_assets"
+    },
+    {
+      "line": 74,
+      "source": "atrelay",
+      "target": "constants"
+    },
+    {
+      "line": 90,
+      "source": "atrelay",
+      "target": "dreaming"
+    },
+    {
+      "line": 106,
+      "source": "atrelay",
+      "target": "helpers"
+    },
+    {
+      "line": 120,
+      "source": "atrelay",
+      "target": "logging_util"
+    },
+    {
+      "line": 107,
+      "source": "atrelay",
+      "target": "persona_config"
+    },
+    {
+      "line": 108,
+      "source": "atrelay",
+      "target": "planning"
+    },
+    {
+      "line": 15,
+      "source": "balance_awareness",
+      "target": "helpers"
+    },
+    {
+      "line": 17,
+      "source": "balance_awareness",
+      "target": "logging_util"
+    },
+    {
+      "line": 16,
+      "source": "balance_awareness",
+      "target": "persona_config"
+    },
+    {
+      "line": 13,
+      "source": "bot_personal_dto",
+      "target": "bot_personal_contract"
+    },
+    {
+      "line": 26,
+      "source": "bot_personal_dto",
+      "target": "schedule_authority"
+    },
+    {
+      "line": 28,
+      "source": "bot_personal_dto",
+      "target": "schedule_authority"
+    },
+    {
+      "line": 19,
+      "source": "bot_personal_outbox",
+      "target": "bot_personal_contract"
+    },
+    {
+      "line": 20,
+      "source": "bot_personal_outbox",
+      "target": "bot_personal_dto"
+    },
+    {
+      "line": 10,
+      "source": "busy_reply_gate",
+      "target": "helpers"
+    },
+    {
+      "line": 12,
+      "source": "busy_reply_gate",
+      "target": "logging_util"
+    },
+    {
+      "line": 11,
+      "source": "busy_reply_gate",
+      "target": "persona_config"
+    },
+    {
+      "line": 6,
+      "source": "calendar_contracts",
+      "target": "companion.contracts"
+    },
+    {
+      "line": 8,
+      "source": "calendar_contracts",
+      "target": "companion.contracts"
+    },
+    {
+      "line": 6,
+      "source": "calendar_contracts",
+      "target": "companion.contracts.calendar_contracts"
+    },
+    {
+      "line": 8,
+      "source": "calendar_contracts",
+      "target": "companion.contracts.calendar_contracts"
+    },
+    {
+      "line": 17,
+      "source": "calendar_observer",
+      "target": "agenda_contracts"
+    },
+    {
+      "line": 24,
+      "source": "calendar_observer",
+      "target": "agenda_contracts"
+    },
+    {
+      "line": 18,
+      "source": "calendar_observer",
+      "target": "calendar_contracts"
+    },
+    {
+      "line": 25,
+      "source": "calendar_observer",
+      "target": "calendar_contracts"
+    },
+    {
+      "line": 20,
+      "source": "chronotype",
+      "target": "helpers"
+    },
+    {
+      "line": 18,
+      "source": "command_handlers",
+      "target": "constants"
+    },
+    {
+      "line": 20,
+      "source": "command_handlers",
+      "target": "group_command_system"
+    },
+    {
+      "line": 19,
+      "source": "command_handlers",
+      "target": "helpers"
+    },
+    {
+      "line": 38,
+      "source": "command_handlers",
+      "target": "persona_config"
+    },
+    {
+      "line": 27,
+      "source": "command_handlers",
+      "target": "photo_generation_scope"
+    },
+    {
+      "line": 37,
+      "source": "command_handlers",
+      "target": "photo_prompt_context"
+    },
+    {
+      "line": 28,
+      "source": "command_handlers",
+      "target": "photo_reference_catalog"
+    },
+    {
+      "line": 39,
+      "source": "command_handlers",
+      "target": "runtime_config_dispatcher"
+    },
+    {
+      "line": 16,
+      "source": "companion.contracts.calendar_contracts",
+      "target": "agenda_contracts"
+    },
+    {
+      "line": 18,
+      "source": "companion.contracts.calendar_contracts",
+      "target": "agenda_contracts"
+    },
+    {
+      "line": 24,
+      "source": "companion.integrations.image_companion_bridge",
+      "target": "companion.integrations.external_bridge_resolver"
+    },
+    {
+      "line": 18,
+      "source": "companion.integrations.image_companion_bridge",
+      "target": "helpers"
+    },
+    {
+      "line": 21,
+      "source": "companion.integrations.image_companion_bridge",
+      "target": "helpers"
+    },
+    {
+      "line": 19,
+      "source": "companion.integrations.image_companion_bridge",
+      "target": "logging_util"
+    },
+    {
+      "line": 22,
+      "source": "companion.integrations.image_companion_bridge",
+      "target": "logging_util"
+    },
+    {
+      "line": 13,
+      "source": "companion.integrations.optional_plugin",
+      "target": "companion.integrations.external_bridge_resolver"
+    },
+    {
+      "line": 17,
+      "source": "companion.integrations.reality_companion_bridge",
+      "target": "companion.integrations.external_bridge_resolver"
+    },
+    {
+      "line": 10,
+      "source": "companion.integrations.reality_companion_bridge",
+      "target": "conversation_prompt_section"
+    },
+    {
+      "line": 14,
+      "source": "companion.integrations.reality_companion_bridge",
+      "target": "conversation_prompt_section"
+    },
+    {
+      "line": 9,
+      "source": "companion.integrations.reality_companion_bridge",
+      "target": "helpers"
+    },
+    {
+      "line": 13,
+      "source": "companion.integrations.reality_companion_bridge",
+      "target": "helpers"
+    },
+    {
+      "line": 11,
+      "source": "companion.integrations.reality_companion_bridge",
+      "target": "logging_util"
+    },
+    {
+      "line": 15,
+      "source": "companion.integrations.reality_companion_bridge",
+      "target": "logging_util"
+    },
+    {
+      "line": 21,
+      "source": "companion_interaction_expression",
+      "target": "affect_modulation_contract"
+    },
+    {
+      "line": 23,
+      "source": "companion_interaction_expression",
+      "target": "affect_modulation_contract"
+    },
+    {
+      "line": 17,
+      "source": "companion_interaction_expression",
+      "target": "domains.affect.interaction_dynamics"
+    },
+    {
+      "line": 19,
+      "source": "companion_interaction_expression",
+      "target": "interaction_dynamics"
+    },
+    {
+      "line": 8,
+      "source": "companion_memory_records",
+      "target": "helpers"
+    },
+    {
+      "line": 5,
+      "source": "config_defaults",
+      "target": "config_schema"
+    },
+    {
+      "line": 19,
+      "source": "config_migration",
+      "target": "logging_util"
+    },
+    {
+      "line": 14,
+      "source": "config_migration",
+      "target": "photo_generation_scope"
+    },
+    {
+      "line": 14,
+      "source": "content_companion_bridge",
+      "target": "creative"
+    },
+    {
+      "line": 16,
+      "source": "content_companion_bridge",
+      "target": "external_bridge_resolver"
+    },
+    {
+      "line": 15,
+      "source": "content_companion_bridge",
+      "target": "helpers"
+    },
+    {
+      "line": 20,
+      "source": "content_companion_bridge",
+      "target": "persona_config"
+    },
+    {
+      "line": 21,
+      "source": "content_companion_bridge",
+      "target": "story_authority"
+    },
+    {
+      "line": 22,
+      "source": "content_companion_bridge",
+      "target": "story_handoff"
+    },
+    {
+      "line": 13,
+      "source": "context_orchestration",
+      "target": "person_context_contract"
+    },
+    {
+      "line": 25,
+      "source": "context_orchestration",
+      "target": "person_context_contract"
+    },
+    {
+      "line": 14,
+      "source": "conversation_injection_plan",
+      "target": "conversation_prompt_section"
+    },
+    {
+      "line": 122,
+      "source": "core_store",
+      "target": "companion_interaction_expression"
+    },
+    {
+      "line": 123,
+      "source": "core_store",
+      "target": "config_migration"
+    },
+    {
+      "line": 79,
+      "source": "core_store",
+      "target": "constants"
+    },
+    {
+      "line": 95,
+      "source": "core_store",
+      "target": "dreaming"
+    },
+    {
+      "line": 111,
+      "source": "core_store",
+      "target": "helpers"
+    },
+    {
+      "line": 172,
+      "source": "core_store",
+      "target": "logging_util"
+    },
+    {
+      "line": 134,
+      "source": "core_store",
+      "target": "person_context_contract"
+    },
+    {
+      "line": 141,
+      "source": "core_store",
+      "target": "persona_config"
+    },
+    {
+      "line": 135,
+      "source": "core_store",
+      "target": "photo_generation_scope"
+    },
+    {
+      "line": 160,
+      "source": "core_store",
+      "target": "planning"
+    },
+    {
+      "line": 124,
+      "source": "core_store",
+      "target": "relationship_ledger"
+    },
+    {
+      "line": 133,
+      "source": "core_store",
+      "target": "storage.path_generation"
+    },
+    {
+      "line": 132,
+      "source": "core_store",
+      "target": "storage.store_manager"
+    },
+    {
+      "line": 142,
+      "source": "core_store",
+      "target": "story_authority"
+    },
+    {
+      "line": 149,
+      "source": "core_store",
+      "target": "story_handoff"
+    },
+    {
+      "line": 153,
+      "source": "core_store",
+      "target": "unified_profile_service"
+    },
+    {
+      "line": 20,
+      "source": "creative",
+      "target": "constants"
+    },
+    {
+      "line": 30,
+      "source": "creative",
+      "target": "helpers"
+    },
+    {
+      "line": 31,
+      "source": "creative",
+      "target": "persona_config"
+    },
+    {
+      "line": 32,
+      "source": "creative",
+      "target": "story_authority"
+    },
+    {
+      "line": 20,
+      "source": "daily_review",
+      "target": "conversation_injection_plan"
+    },
+    {
+      "line": 19,
+      "source": "daily_review",
+      "target": "helpers"
+    },
+    {
+      "line": 24,
+      "source": "daily_review",
+      "target": "logging_util"
+    },
+    {
+      "line": 123,
+      "source": "daily_state",
+      "target": "agenda_contracts"
+    },
+    {
+      "line": 79,
+      "source": "daily_state",
+      "target": "constants"
+    },
+    {
+      "line": 115,
+      "source": "daily_state",
+      "target": "conversation_injection_plan"
+    },
+    {
+      "line": 66,
+      "source": "daily_state",
+      "target": "conversation_prompt_section"
+    },
+    {
+      "line": 121,
+      "source": "daily_state",
+      "target": "daily_state_tick"
+    },
+    {
+      "line": 120,
+      "source": "daily_state",
+      "target": "domains.affect.affect_modulation"
+    },
+    {
+      "line": 95,
+      "source": "daily_state",
+      "target": "dreaming"
+    },
+    {
+      "line": 111,
+      "source": "daily_state",
+      "target": "helpers"
+    },
+    {
+      "line": 137,
+      "source": "daily_state",
+      "target": "logging_util"
+    },
+    {
+      "line": 122,
+      "source": "daily_state",
+      "target": "memo_notes"
+    },
+    {
+      "line": 112,
+      "source": "daily_state",
+      "target": "model_routing"
+    },
+    {
+      "line": 113,
+      "source": "daily_state",
+      "target": "persona_config"
+    },
+    {
+      "line": 124,
+      "source": "daily_state",
+      "target": "planning"
+    },
+    {
+      "line": 114,
+      "source": "daily_state",
+      "target": "story_authority"
+    },
+    {
+      "line": 9,
+      "source": "daily_state_tick",
+      "target": "constants"
+    },
+    {
+      "line": 10,
+      "source": "daily_state_tick",
+      "target": "helpers"
+    },
+    {
+      "line": 22,
+      "source": "daily_state_tick",
+      "target": "logging_util"
+    },
+    {
+      "line": 21,
+      "source": "daily_state_tick",
+      "target": "persona_config"
+    },
+    {
+      "line": 13,
+      "source": "desktop_pet_bridge",
+      "target": "logging_util"
+    },
+    {
+      "line": 8,
+      "source": "domains.affect.affect_modulation",
+      "target": "affect_modulation_contract"
+    },
+    {
+      "line": 10,
+      "source": "domains.affect.affect_modulation",
+      "target": "affect_modulation_contract"
+    },
+    {
+      "line": 8,
+      "source": "domains.affect.emotion_event_ledger",
+      "target": "domains.affect.emotion_event_contract"
+    },
+    {
+      "line": 10,
+      "source": "domains.affect.emotion_event_ledger",
+      "target": "emotion_event_contract"
+    },
+    {
+      "line": 11,
+      "source": "dreaming",
+      "target": "helpers"
+    },
+    {
+      "line": 12,
+      "source": "dreaming",
+      "target": "persona_config"
+    },
+    {
+      "line": 4,
+      "source": "emotion_event_contract",
+      "target": "domains.affect.emotion_event_contract"
+    },
+    {
+      "line": 6,
+      "source": "emotion_event_contract",
+      "target": "domains.affect.emotion_event_contract"
+    },
+    {
+      "line": 4,
+      "source": "emotion_event_ledger",
+      "target": "domains.affect.emotion_event_ledger"
+    },
+    {
+      "line": 6,
+      "source": "emotion_event_ledger",
+      "target": "domains.affect.emotion_event_ledger"
+    },
+    {
+      "line": 4,
+      "source": "emotion_targeting",
+      "target": "domains.affect.emotion_targeting"
+    },
+    {
+      "line": 6,
+      "source": "emotion_targeting",
+      "target": "domains.affect.emotion_targeting"
+    },
+    {
+      "line": 76,
+      "source": "event_dispatch",
+      "target": "constants"
+    },
+    {
+      "line": 92,
+      "source": "event_dispatch",
+      "target": "dreaming"
+    },
+    {
+      "line": 108,
+      "source": "event_dispatch",
+      "target": "helpers"
+    },
+    {
+      "line": 131,
+      "source": "event_dispatch",
+      "target": "logging_util"
+    },
+    {
+      "line": 110,
+      "source": "event_dispatch",
+      "target": "model_routing"
+    },
+    {
+      "line": 109,
+      "source": "event_dispatch",
+      "target": "persona_config"
+    },
+    {
+      "line": 119,
+      "source": "event_dispatch",
+      "target": "planning"
+    },
+    {
+      "line": 111,
+      "source": "event_dispatch",
+      "target": "relationship_policy"
+    },
+    {
+      "line": 12,
+      "source": "extension_api_content",
+      "target": "helpers"
+    },
+    {
+      "line": 21,
+      "source": "extension_api_content",
+      "target": "story_authority"
+    },
+    {
+      "line": 27,
+      "source": "extension_api_content",
+      "target": "story_handoff"
+    },
+    {
+      "line": 13,
+      "source": "extension_api_content",
+      "target": "story_migration_contract"
+    },
+    {
+      "line": 5,
+      "source": "extension_api_diagnostics",
+      "target": "helpers"
+    },
+    {
+      "line": 6,
+      "source": "extension_api_diagnostics",
+      "target": "p6_readonly_projection"
+    },
+    {
+      "line": 6,
+      "source": "extension_api_identity",
+      "target": "helpers"
+    },
+    {
+      "line": 6,
+      "source": "extension_api_memory",
+      "target": "helpers"
+    },
+    {
+      "line": 14,
+      "source": "extension_api_qzone",
+      "target": "qzone_contract"
+    },
+    {
+      "line": 8,
+      "source": "extension_api_relationship",
+      "target": "constants"
+    },
+    {
+      "line": 12,
+      "source": "extension_api_relationship",
+      "target": "helpers"
+    },
+    {
+      "line": 6,
+      "source": "extension_api_scheduler",
+      "target": "helpers"
+    },
+    {
+      "line": 10,
+      "source": "external_bridge_resolver",
+      "target": "companion.integrations"
+    },
+    {
+      "line": 12,
+      "source": "external_bridge_resolver",
+      "target": "companion.integrations"
+    },
+    {
+      "line": 10,
+      "source": "external_bridge_resolver",
+      "target": "companion.integrations.external_bridge_resolver"
+    },
+    {
+      "line": 12,
+      "source": "external_bridge_resolver",
+      "target": "companion.integrations.external_bridge_resolver"
+    },
+    {
+      "line": 19,
+      "source": "final_response_persistence",
+      "target": "helpers"
+    },
+    {
+      "line": 28,
+      "source": "final_response_persistence",
+      "target": "llm_tool_actions"
+    },
+    {
+      "line": 31,
+      "source": "final_response_persistence",
+      "target": "logging_util"
+    },
+    {
+      "line": 29,
+      "source": "final_response_persistence",
+      "target": "persona_config"
+    },
+    {
+      "line": 30,
+      "source": "final_response_persistence",
+      "target": "segmented_message"
+    },
+    {
+      "line": 21,
+      "source": "forward_message",
+      "target": "conversation_injection_plan"
+    },
+    {
+      "line": 25,
+      "source": "forward_message",
+      "target": "helpers"
+    },
+    {
+      "line": 27,
+      "source": "forward_message",
+      "target": "logging_util"
+    },
+    {
+      "line": 26,
+      "source": "forward_message",
+      "target": "persona_config"
+    },
+    {
+      "line": 14,
+      "source": "game_integration",
+      "target": "logging_util"
+    },
+    {
+      "line": 14,
+      "source": "group_member_safety",
+      "target": "conversation_injection_plan"
+    },
+    {
+      "line": 12,
+      "source": "group_member_safety",
+      "target": "helpers"
+    },
+    {
+      "line": 15,
+      "source": "group_member_safety",
+      "target": "logging_util"
+    },
+    {
+      "line": 13,
+      "source": "group_member_safety",
+      "target": "persona_config"
+    },
+    {
+      "line": 74,
+      "source": "group_observation",
+      "target": "constants"
+    },
+    {
+      "line": 117,
+      "source": "group_observation",
+      "target": "conversation_injection_plan"
+    },
+    {
+      "line": 122,
+      "source": "group_observation",
+      "target": "conversation_prompt_section"
+    },
+    {
+      "line": 90,
+      "source": "group_observation",
+      "target": "dreaming"
+    },
+    {
+      "line": 123,
+      "source": "group_observation",
+      "target": "group_prompt_context"
+    },
+    {
+      "line": 106,
+      "source": "group_observation",
+      "target": "helpers"
+    },
+    {
+      "line": 139,
+      "source": "group_observation",
+      "target": "logging_util"
+    },
+    {
+      "line": 127,
+      "source": "group_observation",
+      "target": "planning"
+    },
+    {
+      "line": 126,
+      "source": "group_observation",
+      "target": "segmented_message"
+    },
+    {
+      "line": 10,
+      "source": "group_prompt_context",
+      "target": "conversation_prompt_section"
+    },
+    {
+      "line": 16,
+      "source": "group_prompt_context",
+      "target": "segmented_message"
+    },
+    {
+      "line": 75,
+      "source": "group_wakeup",
+      "target": "constants"
+    },
+    {
+      "line": 91,
+      "source": "group_wakeup",
+      "target": "dreaming"
+    },
+    {
+      "line": 107,
+      "source": "group_wakeup",
+      "target": "helpers"
+    },
+    {
+      "line": 120,
+      "source": "group_wakeup",
+      "target": "logging_util"
+    },
+    {
+      "line": 108,
+      "source": "group_wakeup",
+      "target": "planning"
+    },
+    {
+      "line": 6,
+      "source": "image_companion_bridge",
+      "target": "companion.integrations"
+    },
+    {
+      "line": 8,
+      "source": "image_companion_bridge",
+      "target": "companion.integrations"
+    },
+    {
+      "line": 6,
+      "source": "image_companion_bridge",
+      "target": "companion.integrations.image_companion_bridge"
+    },
+    {
+      "line": 8,
+      "source": "image_companion_bridge",
+      "target": "companion.integrations.image_companion_bridge"
+    },
+    {
+      "line": 76,
+      "source": "integration_status",
+      "target": "constants"
+    },
+    {
+      "line": 35,
+      "source": "integration_status",
+      "target": "conversation_prompt_section"
+    },
+    {
+      "line": 110,
+      "source": "integration_status",
+      "target": "diagnostic_envelope"
+    },
+    {
+      "line": 93,
+      "source": "integration_status",
+      "target": "dreaming"
+    },
+    {
+      "line": 109,
+      "source": "integration_status",
+      "target": "helpers"
+    },
+    {
+      "line": 123,
+      "source": "integration_status",
+      "target": "logging_util"
+    },
+    {
+      "line": 509,
+      "source": "integration_status",
+      "target": "page_api"
+    },
+    {
+      "line": 36,
+      "source": "integration_status",
+      "target": "persona_config"
+    },
+    {
+      "line": 111,
+      "source": "integration_status",
+      "target": "planning"
+    },
+    {
+      "line": 92,
+      "source": "integration_status",
+      "target": "plugin_identity"
+    },
+    {
+      "line": 526,
+      "source": "integration_status",
+      "target": "standalone_webui"
+    },
+    {
+      "line": 4,
+      "source": "interaction_dynamics",
+      "target": "domains.affect.interaction_dynamics"
+    },
+    {
+      "line": 6,
+      "source": "interaction_dynamics",
+      "target": "domains.affect.interaction_dynamics"
+    },
+    {
+      "line": 12,
+      "source": "interaction_query_orchestrator",
+      "target": "interaction_tool_contract"
+    },
+    {
+      "line": 9,
+      "source": "interaction_tool_contract",
+      "target": "helpers"
+    },
+    {
+      "line": 14,
+      "source": "interaction_utils",
+      "target": "helpers"
+    },
+    {
+      "line": 15,
+      "source": "interaction_utils",
+      "target": "persona_config"
+    },
+    {
+      "line": 20,
+      "source": "lab_fixture_adapter",
+      "target": "plugin_identity"
+    },
+    {
+      "line": 21,
+      "source": "lab_fixture_adapter",
+      "target": "relationship_policy"
+    },
+    {
+      "line": 41,
+      "source": "llm_tool_actions",
+      "target": "conversation_prompt_section"
+    },
+    {
+      "line": 28,
+      "source": "llm_tool_actions",
+      "target": "helpers"
+    },
+    {
+      "line": 80,
+      "source": "llm_tool_actions",
+      "target": "interaction_query_orchestrator"
+    },
+    {
+      "line": 79,
+      "source": "llm_tool_actions",
+      "target": "interaction_tool_contract"
+    },
+    {
+      "line": 78,
+      "source": "llm_tool_actions",
+      "target": "logging_util"
+    },
+    {
+      "line": 39,
+      "source": "llm_tool_actions",
+      "target": "memo_notes"
+    },
+    {
+      "line": 42,
+      "source": "llm_tool_actions",
+      "target": "owned_reaction_asset_catalog"
+    },
+    {
+      "line": 40,
+      "source": "llm_tool_actions",
+      "target": "persona_config"
+    },
+    {
+      "line": 43,
+      "source": "llm_tool_actions",
+      "target": "qzone_selection"
+    },
+    {
+      "line": 77,
+      "source": "llm_tool_actions",
+      "target": "reaction_asset_library"
+    },
+    {
+      "line": 52,
+      "source": "llm_tool_actions",
+      "target": "reaction_expression"
+    },
+    {
+      "line": 466,
+      "source": "main",
+      "target": "agenda_runtime"
+    },
+    {
+      "line": 440,
+      "source": "main",
+      "target": "astrbot_knowledge"
+    },
+    {
+      "line": 441,
+      "source": "main",
+      "target": "atrelay"
+    },
+    {
+      "line": 356,
+      "source": "main",
+      "target": "balance_awareness"
+    },
+    {
+      "line": 357,
+      "source": "main",
+      "target": "body_monitor_integration"
+    },
+    {
+      "line": 312,
+      "source": "main",
+      "target": "busy_reply_gate"
+    },
+    {
+      "line": 313,
+      "source": "main",
+      "target": "chronotype"
+    },
+    {
+      "line": 474,
+      "source": "main",
+      "target": "command_handlers"
+    },
+    {
+      "line": 246,
+      "source": "main",
+      "target": "companion_interaction_expression"
+    },
+    {
+      "line": 146,
+      "source": "main",
+      "target": "config_migration"
+    },
+    {
+      "line": 89,
+      "source": "main",
+      "target": "constants"
+    },
+    {
+      "line": 361,
+      "source": "main",
+      "target": "content_companion_bridge"
+    },
+    {
+      "line": 219,
+      "source": "main",
+      "target": "context_orchestration"
+    },
+    {
+      "line": 325,
+      "source": "main",
+      "target": "conversation_injection_plan"
+    },
+    {
+      "line": 332,
+      "source": "main",
+      "target": "conversation_prompt_section"
+    },
+    {
+      "line": 436,
+      "source": "main",
+      "target": "core_store"
+    },
+    {
+      "line": 360,
+      "source": "main",
+      "target": "creative"
+    },
+    {
+      "line": 467,
+      "source": "main",
+      "target": "daily_review"
+    },
+    {
+      "line": 465,
+      "source": "main",
+      "target": "daily_state"
+    },
+    {
+      "line": 240,
+      "source": "main",
+      "target": "domains.affect.reply_temperature"
+    },
+    {
+      "line": 109,
+      "source": "main",
+      "target": "dreaming"
+    },
+    {
+      "line": 420,
+      "source": "main",
+      "target": "event_dispatch"
+    },
+    {
+      "line": 224,
+      "source": "main",
+      "target": "extension_api_content"
+    },
+    {
+      "line": 225,
+      "source": "main",
+      "target": "extension_api_diagnostics"
+    },
+    {
+      "line": 226,
+      "source": "main",
+      "target": "extension_api_identity"
+    },
+    {
+      "line": 227,
+      "source": "main",
+      "target": "extension_api_image"
+    },
+    {
+      "line": 228,
+      "source": "main",
+      "target": "extension_api_memory"
+    },
+    {
+      "line": 229,
+      "source": "main",
+      "target": "extension_api_qzone"
+    },
+    {
+      "line": 230,
+      "source": "main",
+      "target": "extension_api_relationship"
+    },
+    {
+      "line": 231,
+      "source": "main",
+      "target": "extension_api_scheduler"
+    },
+    {
+      "line": 323,
+      "source": "main",
+      "target": "forward_message"
+    },
+    {
+      "line": 470,
+      "source": "main",
+      "target": "game_integration"
+    },
+    {
+      "line": 147,
+      "source": "main",
+      "target": "group_context_interception"
+    },
+    {
+      "line": 365,
+      "source": "main",
+      "target": "group_cycle_boundary"
+    },
+    {
+      "line": 367,
+      "source": "main",
+      "target": "group_member_safety"
+    },
+    {
+      "line": 364,
+      "source": "main",
+      "target": "group_observation"
+    },
+    {
+      "line": 363,
+      "source": "main",
+      "target": "group_wakeup"
+    },
+    {
+      "line": 125,
+      "source": "main",
+      "target": "helpers"
+    },
+    {
+      "line": 198,
+      "source": "main",
+      "target": "identity_namespace"
+    },
+    {
+      "line": 444,
+      "source": "main",
+      "target": "image_companion_bridge"
+    },
+    {
+      "line": 439,
+      "source": "main",
+      "target": "integration_status"
+    },
+    {
+      "line": 472,
+      "source": "main",
+      "target": "interaction_utils"
+    },
+    {
+      "line": 245,
+      "source": "main",
+      "target": "lab_fixture_adapter"
+    },
+    {
+      "line": 473,
+      "source": "main",
+      "target": "llm_tool_actions"
+    },
+    {
+      "line": 490,
+      "source": "main",
+      "target": "logging_util"
+    },
+    {
+      "line": 314,
+      "source": "main",
+      "target": "memory_companion_adapter"
+    },
+    {
+      "line": 232,
+      "source": "main",
+      "target": "memory_page_snapshot"
+    },
+    {
+      "line": 317,
+      "source": "main",
+      "target": "message_pipeline"
+    },
+    {
+      "line": 185,
+      "source": "main",
+      "target": "migration_backfill"
+    },
+    {
+      "line": 186,
+      "source": "main",
+      "target": "migration_dual_write"
+    },
+    {
+      "line": 188,
+      "source": "main",
+      "target": "migration_read_router"
+    },
+    {
+      "line": 187,
+      "source": "main",
+      "target": "migration_replay"
+    },
+    {
+      "line": 199,
+      "source": "main",
+      "target": "migration_scoped_projection"
+    },
+    {
+      "line": 190,
+      "source": "main",
+      "target": "migration_source_inspector"
+    },
+    {
+      "line": 189,
+      "source": "main",
+      "target": "migration_stability"
+    },
+    {
+      "line": 7177,
+      "source": "main",
+      "target": "migration_stability"
+    },
+    {
+      "line": 7498,
+      "source": "main",
+      "target": "migration_stability"
+    },
+    {
+      "line": 175,
+      "source": "main",
+      "target": "model_routing"
+    },
+    {
+      "line": 445,
+      "source": "main",
+      "target": "nai_image_bridge"
+    },
+    {
+      "line": 422,
+      "source": "main",
+      "target": "news_exploration"
+    },
+    {
+      "line": 221,
+      "source": "main",
+      "target": "p4_affinity_confinement"
+    },
+    {
+      "line": 222,
+      "source": "main",
+      "target": "p4_live_runtime"
+    },
+    {
+      "line": 223,
+      "source": "main",
+      "target": "p4_runtime_gate"
+    },
+    {
+      "line": 220,
+      "source": "main",
+      "target": "p4_shadow"
+    },
+    {
+      "line": 315,
+      "source": "main",
+      "target": "p5_attestation"
+    },
+    {
+      "line": 316,
+      "source": "main",
+      "target": "p5_source_observer"
+    },
+    {
+      "line": 338,
+      "source": "main",
+      "target": "passive_state_pipeline"
+    },
+    {
+      "line": 176,
+      "source": "main",
+      "target": "person_context_contract"
+    },
+    {
+      "line": 151,
+      "source": "main",
+      "target": "persona_config"
+    },
+    {
+      "line": 169,
+      "source": "main",
+      "target": "persona_sqlite_store"
+    },
+    {
+      "line": 247,
+      "source": "main",
+      "target": "photo_reference_catalog"
+    },
+    {
+      "line": 469,
+      "source": "main",
+      "target": "place_cognitive_map"
+    },
+    {
+      "line": 478,
+      "source": "main",
+      "target": "planning"
+    },
+    {
+      "line": 438,
+      "source": "main",
+      "target": "platform_compat"
+    },
+    {
+      "line": 453,
+      "source": "main",
+      "target": "plugin_bootstrap"
+    },
+    {
+      "line": 241,
+      "source": "main",
+      "target": "plugin_identity"
+    },
+    {
+      "line": 447,
+      "source": "main",
+      "target": "plugin_lifecycle"
+    },
+    {
+      "line": 324,
+      "source": "main",
+      "target": "private_image"
+    },
+    {
+      "line": 73,
+      "source": "main",
+      "target": "private_scope_isolation"
+    },
+    {
+      "line": 362,
+      "source": "main",
+      "target": "proactive"
+    },
+    {
+      "line": 446,
+      "source": "main",
+      "target": "proactive_chat_runtime_bridge"
+    },
+    {
+      "line": 442,
+      "source": "main",
+      "target": "proactive_engine"
+    },
+    {
+      "line": 443,
+      "source": "main",
+      "target": "proactive_message"
+    },
+    {
+      "line": 337,
+      "source": "main",
+      "target": "prompt_surface"
+    },
+    {
+      "line": 339,
+      "source": "main",
+      "target": "qzone_integration"
+    },
+    {
+      "line": 421,
+      "source": "main",
+      "target": "reading_archive"
+    },
+    {
+      "line": 477,
+      "source": "main",
+      "target": "reality_companion_bridge"
+    },
+    {
+      "line": 191,
+      "source": "main",
+      "target": "relationship_account_store"
+    },
+    {
+      "line": 193,
+      "source": "main",
+      "target": "relationship_affinity_runtime"
+    },
+    {
+      "line": 248,
+      "source": "main",
+      "target": "relationship_ledger"
+    },
+    {
+      "line": 249,
+      "source": "main",
+      "target": "relationship_policy"
+    },
+    {
+      "line": 192,
+      "source": "main",
+      "target": "req041_observability"
+    },
+    {
+      "line": 7200,
+      "source": "main",
+      "target": "req041_observability"
+    },
+    {
+      "line": 250,
+      "source": "main",
+      "target": "runtime_config_dispatcher"
+    },
+    {
+      "line": 468,
+      "source": "main",
+      "target": "scene_context"
+    },
+    {
+      "line": 204,
+      "source": "main",
+      "target": "scoped_runtime_view"
+    },
+    {
+      "line": 340,
+      "source": "main",
+      "target": "segmented_message"
+    },
+    {
+      "line": 424,
+      "source": "main",
+      "target": "self_timeline"
+    },
+    {
+      "line": 471,
+      "source": "main",
+      "target": "state_views"
+    },
+    {
+      "line": 437,
+      "source": "main",
+      "target": "storage.path_generation"
+    },
+    {
+      "line": 233,
+      "source": "main",
+      "target": "story_authority"
+    },
+    {
+      "line": 239,
+      "source": "main",
+      "target": "story_handoff"
+    },
+    {
+      "line": 355,
+      "source": "main",
+      "target": "token_budget"
+    },
+    {
+      "line": 322,
+      "source": "main",
+      "target": "tool_history_sanitizer"
+    },
+    {
+      "line": 475,
+      "source": "main",
+      "target": "tts_enhancement"
+    },
+    {
+      "line": 476,
+      "source": "main",
+      "target": "tts_tool_sanitizer"
+    },
+    {
+      "line": 184,
+      "source": "main",
+      "target": "unified_person_registry"
+    },
+    {
+      "line": 205,
+      "source": "main",
+      "target": "unified_profile_contract"
+    },
+    {
+      "line": 211,
+      "source": "main",
+      "target": "unified_profile_service"
+    },
+    {
+      "line": 359,
+      "source": "main",
+      "target": "user_memory"
+    },
+    {
+      "line": 358,
+      "source": "main",
+      "target": "worldbook"
+    },
+    {
+      "line": 9,
+      "source": "memo_notes",
+      "target": "helpers"
+    },
+    {
+      "line": 13,
+      "source": "memo_tool_support",
+      "target": "helpers"
+    },
+    {
+      "line": 18,
+      "source": "memory_companion_adapter",
+      "target": "bot_personal_contract"
+    },
+    {
+      "line": 29,
+      "source": "memory_companion_adapter",
+      "target": "bot_personal_outbox"
+    },
+    {
+      "line": 31,
+      "source": "memory_companion_adapter",
+      "target": "companion_interaction_expression"
+    },
+    {
+      "line": 37,
+      "source": "memory_companion_adapter",
+      "target": "conversation_prompt_section"
+    },
+    {
+      "line": 30,
+      "source": "memory_companion_adapter",
+      "target": "helpers"
+    },
+    {
+      "line": 35,
+      "source": "memory_companion_adapter",
+      "target": "identity_namespace"
+    },
+    {
+      "line": 38,
+      "source": "memory_companion_adapter",
+      "target": "logging_util"
+    },
+    {
+      "line": 34,
+      "source": "memory_companion_adapter",
+      "target": "namespace_capability"
+    },
+    {
+      "line": 36,
+      "source": "memory_companion_adapter",
+      "target": "persona_config"
+    },
+    {
+      "line": 32,
+      "source": "memory_companion_adapter",
+      "target": "relationship_ledger"
+    },
+    {
+      "line": 33,
+      "source": "memory_companion_adapter",
+      "target": "relationship_policy"
+    },
+    {
+      "line": 11,
+      "source": "message_pipeline",
+      "target": "companion_interaction_expression"
+    },
+    {
+      "line": 12,
+      "source": "message_pipeline",
+      "target": "helpers"
+    },
+    {
+      "line": 20,
+      "source": "message_pipeline",
+      "target": "logging_util"
+    },
+    {
+      "line": 19,
+      "source": "migration_backfill",
+      "target": "identity_namespace"
+    },
+    {
+      "line": 31,
+      "source": "migration_backfill",
+      "target": "identity_namespace"
+    },
+    {
+      "line": 20,
+      "source": "migration_backfill",
+      "target": "migration_coordinator"
+    },
+    {
+      "line": 32,
+      "source": "migration_backfill",
+      "target": "migration_coordinator"
+    },
+    {
+      "line": 21,
+      "source": "migration_backfill",
+      "target": "migration_outbox"
+    },
+    {
+      "line": 33,
+      "source": "migration_backfill",
+      "target": "migration_outbox"
+    },
+    {
+      "line": 22,
+      "source": "migration_backfill",
+      "target": "person_context_contract"
+    },
+    {
+      "line": 34,
+      "source": "migration_backfill",
+      "target": "person_context_contract"
+    },
+    {
+      "line": 23,
+      "source": "migration_backfill",
+      "target": "relationship_account_store"
+    },
+    {
+      "line": 35,
+      "source": "migration_backfill",
+      "target": "relationship_account_store"
+    },
+    {
+      "line": 29,
+      "source": "migration_backfill",
+      "target": "unified_person_registry"
+    },
+    {
+      "line": 41,
+      "source": "migration_backfill",
+      "target": "unified_person_registry"
+    },
+    {
+      "line": 10,
+      "source": "migration_dual_write",
+      "target": "identity_namespace"
+    },
+    {
+      "line": 15,
+      "source": "migration_dual_write",
+      "target": "identity_namespace"
+    },
+    {
+      "line": 11,
+      "source": "migration_dual_write",
+      "target": "migration_coordinator"
+    },
+    {
+      "line": 16,
+      "source": "migration_dual_write",
+      "target": "migration_coordinator"
+    },
+    {
+      "line": 12,
+      "source": "migration_dual_write",
+      "target": "migration_outbox"
+    },
+    {
+      "line": 17,
+      "source": "migration_dual_write",
+      "target": "migration_outbox"
+    },
+    {
+      "line": 13,
+      "source": "migration_dual_write",
+      "target": "unified_person_registry"
+    },
+    {
+      "line": 18,
+      "source": "migration_dual_write",
+      "target": "unified_person_registry"
+    },
+    {
+      "line": 15,
+      "source": "migration_outbox",
+      "target": "identity_namespace"
+    },
+    {
+      "line": 17,
+      "source": "migration_outbox",
+      "target": "identity_namespace"
+    },
+    {
+      "line": 9,
+      "source": "migration_read_router",
+      "target": "identity_namespace"
+    },
+    {
+      "line": 14,
+      "source": "migration_read_router",
+      "target": "identity_namespace"
+    },
+    {
+      "line": 10,
+      "source": "migration_read_router",
+      "target": "migration_coordinator"
+    },
+    {
+      "line": 15,
+      "source": "migration_read_router",
+      "target": "migration_coordinator"
+    },
+    {
+      "line": 11,
+      "source": "migration_read_router",
+      "target": "relationship_account_store"
+    },
+    {
+      "line": 16,
+      "source": "migration_read_router",
+      "target": "relationship_account_store"
+    },
+    {
+      "line": 12,
+      "source": "migration_read_router",
+      "target": "unified_person_registry"
+    },
+    {
+      "line": 17,
+      "source": "migration_read_router",
+      "target": "unified_person_registry"
+    },
+    {
+      "line": 10,
+      "source": "migration_replay",
+      "target": "identity_namespace"
+    },
+    {
+      "line": 16,
+      "source": "migration_replay",
+      "target": "identity_namespace"
+    },
+    {
+      "line": 11,
+      "source": "migration_replay",
+      "target": "migration_coordinator"
+    },
+    {
+      "line": 17,
+      "source": "migration_replay",
+      "target": "migration_coordinator"
+    },
+    {
+      "line": 12,
+      "source": "migration_replay",
+      "target": "migration_outbox"
+    },
+    {
+      "line": 18,
+      "source": "migration_replay",
+      "target": "migration_outbox"
+    },
+    {
+      "line": 13,
+      "source": "migration_replay",
+      "target": "relationship_account_store"
+    },
+    {
+      "line": 19,
+      "source": "migration_replay",
+      "target": "relationship_account_store"
+    },
+    {
+      "line": 14,
+      "source": "migration_replay",
+      "target": "unified_person_registry"
+    },
+    {
+      "line": 20,
+      "source": "migration_replay",
+      "target": "unified_person_registry"
+    },
+    {
+      "line": 21,
+      "source": "migration_scoped_projection",
+      "target": "authoritative_private_memory"
+    },
+    {
+      "line": 34,
+      "source": "migration_scoped_projection",
+      "target": "authoritative_private_memory"
+    },
+    {
+      "line": 14,
+      "source": "migration_scoped_projection",
+      "target": "expression_scope_ownership"
+    },
+    {
+      "line": 27,
+      "source": "migration_scoped_projection",
+      "target": "expression_scope_ownership"
+    },
+    {
+      "line": 13,
+      "source": "migration_scoped_projection",
+      "target": "identity_namespace"
+    },
+    {
+      "line": 26,
+      "source": "migration_scoped_projection",
+      "target": "identity_namespace"
+    },
+    {
+      "line": 19,
+      "source": "migration_scoped_projection",
+      "target": "scoped_domain_contract"
+    },
+    {
+      "line": 32,
+      "source": "migration_scoped_projection",
+      "target": "scoped_domain_contract"
+    },
+    {
+      "line": 20,
+      "source": "migration_scoped_projection",
+      "target": "unified_person_registry"
+    },
+    {
+      "line": 33,
+      "source": "migration_scoped_projection",
+      "target": "unified_person_registry"
+    },
+    {
+      "line": 14,
+      "source": "nai_image_bridge",
+      "target": "external_bridge_resolver"
+    },
+    {
+      "line": 13,
+      "source": "nai_image_bridge",
+      "target": "helpers"
+    },
+    {
+      "line": 16,
+      "source": "nai_image_bridge",
+      "target": "logging_util"
+    },
+    {
+      "line": 15,
+      "source": "nai_image_bridge",
+      "target": "persona_config"
+    },
+    {
+      "line": 7,
+      "source": "namespace_capability",
+      "target": "identity_namespace"
+    },
+    {
+      "line": 16,
+      "source": "namespace_capability",
+      "target": "identity_namespace"
+    },
+    {
+      "line": 75,
+      "source": "news_exploration",
+      "target": "constants"
+    },
+    {
+      "line": 91,
+      "source": "news_exploration",
+      "target": "dreaming"
+    },
+    {
+      "line": 107,
+      "source": "news_exploration",
+      "target": "helpers"
+    },
+    {
+      "line": 139,
+      "source": "news_exploration",
+      "target": "logging_util"
+    },
+    {
+      "line": 108,
+      "source": "news_exploration",
+      "target": "persona_config"
+    },
+    {
+      "line": 127,
+      "source": "news_exploration",
+      "target": "planning"
+    },
+    {
+      "line": 7,
+      "source": "p4_live_runtime",
+      "target": "p4_affinity_confinement"
+    },
+    {
+      "line": 10,
+      "source": "p4_live_runtime",
+      "target": "p4_affinity_confinement"
+    },
+    {
+      "line": 8,
+      "source": "p4_live_runtime",
+      "target": "p4_runtime_gate"
+    },
+    {
+      "line": 11,
+      "source": "p4_live_runtime",
+      "target": "p4_runtime_gate"
+    },
+    {
+      "line": 7,
+      "source": "p4_runtime_gate",
+      "target": "p4_affinity_confinement"
+    },
+    {
+      "line": 9,
+      "source": "p4_runtime_gate",
+      "target": "p4_affinity_confinement"
+    },
+    {
+      "line": 106,
+      "source": "page_api",
+      "target": "agenda_contracts"
+    },
+    {
+      "line": 107,
+      "source": "page_api",
+      "target": "calendar_contracts"
+    },
+    {
+      "line": 77,
+      "source": "page_api",
+      "target": "companion_interaction_expression"
+    },
+    {
+      "line": 65,
+      "source": "page_api",
+      "target": "config_migration"
+    },
+    {
+      "line": 57,
+      "source": "page_api",
+      "target": "constants"
+    },
+    {
+      "line": 66,
+      "source": "page_api",
+      "target": "diagnostic_envelope"
+    },
+    {
+      "line": 78,
+      "source": "page_api",
+      "target": "expression_scope_ownership"
+    },
+    {
+      "line": 67,
+      "source": "page_api",
+      "target": "helpers"
+    },
+    {
+      "line": 147,
+      "source": "page_api",
+      "target": "logging_util"
+    },
+    {
+      "line": 115,
+      "source": "page_api",
+      "target": "memo_notes"
+    },
+    {
+      "line": 104,
+      "source": "page_api",
+      "target": "model_routing"
+    },
+    {
+      "line": 76,
+      "source": "page_api",
+      "target": "owned_reaction_asset_catalog"
+    },
+    {
+      "line": 101,
+      "source": "page_api",
+      "target": "page_api_qzone"
+    },
+    {
+      "line": 103,
+      "source": "page_api",
+      "target": "page_api_settings"
+    },
+    {
+      "line": 102,
+      "source": "page_api",
+      "target": "page_api_users_groups"
+    },
+    {
+      "line": 148,
+      "source": "page_api",
+      "target": "page_backend"
+    },
+    {
+      "line": 68,
+      "source": "page_api",
+      "target": "persona_config"
+    },
+    {
+      "line": 121,
+      "source": "page_api",
+      "target": "photo_reference_catalog"
+    },
+    {
+      "line": 130,
+      "source": "page_api",
+      "target": "photo_reference_metadata"
+    },
+    {
+      "line": 136,
+      "source": "page_api",
+      "target": "photo_reference_selection"
+    },
+    {
+      "line": 105,
+      "source": "page_api",
+      "target": "planning"
+    },
+    {
+      "line": 146,
+      "source": "page_api",
+      "target": "reaction_asset_library"
+    },
+    {
+      "line": 75,
+      "source": "page_api",
+      "target": "reference_asset_gate"
+    },
+    {
+      "line": 137,
+      "source": "page_api",
+      "target": "reference_assets"
+    },
+    {
+      "line": 84,
+      "source": "page_api",
+      "target": "relationship_ledger"
+    },
+    {
+      "line": 91,
+      "source": "page_api",
+      "target": "relationship_policy"
+    },
+    {
+      "line": 97,
+      "source": "page_api",
+      "target": "runtime_config_dispatcher"
+    },
+    {
+      "line": 69,
+      "source": "page_api",
+      "target": "story_authority"
+    },
+    {
+      "line": 12,
+      "source": "page_api_qzone",
+      "target": "logging_util"
+    },
+    {
+      "line": 11,
+      "source": "page_api_qzone",
+      "target": "qzone_recent_parser"
+    },
+    {
+      "line": 9,
+      "source": "page_api_settings",
+      "target": "companion_interaction_expression"
+    },
+    {
+      "line": 10,
+      "source": "page_api_settings",
+      "target": "constants"
+    },
+    {
+      "line": 11,
+      "source": "page_api_settings",
+      "target": "helpers"
+    },
+    {
+      "line": 29,
+      "source": "page_api_settings",
+      "target": "model_routing"
+    },
+    {
+      "line": 18,
+      "source": "page_api_settings",
+      "target": "photo_generation_scope"
+    },
+    {
+      "line": 22,
+      "source": "page_api_settings",
+      "target": "photo_reference_catalog"
+    },
+    {
+      "line": 23,
+      "source": "page_api_settings",
+      "target": "relationship_ledger"
+    },
+    {
+      "line": 24,
+      "source": "page_api_settings",
+      "target": "relationship_policy"
+    },
+    {
+      "line": 28,
+      "source": "page_api_settings",
+      "target": "segmented_message"
+    },
+    {
+      "line": 17,
+      "source": "page_api_users_groups",
+      "target": "companion_interaction_expression"
+    },
+    {
+      "line": 18,
+      "source": "page_api_users_groups",
+      "target": "emotion_diagnostics"
+    },
+    {
+      "line": 16,
+      "source": "page_api_users_groups",
+      "target": "helpers"
+    },
+    {
+      "line": 25,
+      "source": "page_api_users_groups",
+      "target": "logging_util"
+    },
+    {
+      "line": 24,
+      "source": "page_api_users_groups",
+      "target": "migration_backfill"
+    },
+    {
+      "line": 19,
+      "source": "page_api_users_groups",
+      "target": "relationship_ledger"
+    },
+    {
+      "line": 3,
+      "source": "page_backend",
+      "target": "page_backend.backups"
+    },
+    {
+      "line": 4,
+      "source": "page_backend",
+      "target": "page_backend.logs"
+    },
+    {
+      "line": 5,
+      "source": "page_backend",
+      "target": "page_backend.routing"
+    },
+    {
+      "line": 6,
+      "source": "page_backend",
+      "target": "page_backend.validation"
+    },
+    {
+      "line": 10,
+      "source": "page_backend.backups",
+      "target": "page_backend.validation"
+    },
+    {
+      "line": 9,
+      "source": "passive_state_pipeline",
+      "target": "conversation_injection_plan"
+    },
+    {
+      "line": 13,
+      "source": "passive_state_pipeline",
+      "target": "conversation_prompt_section"
+    },
+    {
+      "line": 14,
+      "source": "passive_state_pipeline",
+      "target": "group_prompt_context"
+    },
+    {
+      "line": 18,
+      "source": "passive_state_pipeline",
+      "target": "helpers"
+    },
+    {
+      "line": 21,
+      "source": "passive_state_pipeline",
+      "target": "logging_util"
+    },
+    {
+      "line": 19,
+      "source": "passive_state_pipeline",
+      "target": "persona_config"
+    },
+    {
+      "line": 20,
+      "source": "passive_state_pipeline",
+      "target": "prompt_surface"
+    },
+    {
+      "line": 15,
+      "source": "persona_sqlite_store",
+      "target": "storage.sqlite_backend"
+    },
+    {
+      "line": 16,
+      "source": "persona_sqlite_store",
+      "target": "storage.store_manager"
+    },
+    {
+      "line": 9,
+      "source": "photo_prompt_context",
+      "target": "photo_wardrobe_decision"
+    },
+    {
+      "line": 12,
+      "source": "photo_reference_metadata",
+      "target": "photo_reference_catalog"
+    },
+    {
+      "line": 6,
+      "source": "photo_reference_plan",
+      "target": "photo_reference_intent"
+    },
+    {
+      "line": 12,
+      "source": "place_cognitive_map",
+      "target": "helpers"
+    },
+    {
+      "line": 14,
+      "source": "place_cognitive_map",
+      "target": "logging_util"
+    },
+    {
+      "line": 13,
+      "source": "place_cognitive_map",
+      "target": "scoped_domain_contract"
+    },
+    {
+      "line": 11,
+      "source": "planning",
+      "target": "constants"
+    },
+    {
+      "line": 12,
+      "source": "planning",
+      "target": "helpers"
+    },
+    {
+      "line": 14,
+      "source": "planning",
+      "target": "logging_util"
+    },
+    {
+      "line": 13,
+      "source": "planning",
+      "target": "persona_config"
+    },
+    {
+      "line": 7,
+      "source": "platform_compat",
+      "target": "helpers"
+    },
+    {
+      "line": 8,
+      "source": "platform_compat",
+      "target": "persona_config"
+    },
+    {
+      "line": 13,
+      "source": "plugin_bootstrap",
+      "target": "body_monitor_integration"
+    },
+    {
+      "line": 14,
+      "source": "plugin_bootstrap",
+      "target": "bot_personal_contract"
+    },
+    {
+      "line": 15,
+      "source": "plugin_bootstrap",
+      "target": "config_migration"
+    },
+    {
+      "line": 16,
+      "source": "plugin_bootstrap",
+      "target": "constants"
+    },
+    {
+      "line": 23,
+      "source": "plugin_bootstrap",
+      "target": "helpers"
+    },
+    {
+      "line": 49,
+      "source": "plugin_bootstrap",
+      "target": "logging_util"
+    },
+    {
+      "line": 43,
+      "source": "plugin_bootstrap",
+      "target": "migration_coordinator"
+    },
+    {
+      "line": 44,
+      "source": "plugin_bootstrap",
+      "target": "migration_outbox"
+    },
+    {
+      "line": 45,
+      "source": "plugin_bootstrap",
+      "target": "model_routing"
+    },
+    {
+      "line": 31,
+      "source": "plugin_bootstrap",
+      "target": "p5_attestation"
+    },
+    {
+      "line": 33,
+      "source": "plugin_bootstrap",
+      "target": "photo_generation_scope"
+    },
+    {
+      "line": 34,
+      "source": "plugin_bootstrap",
+      "target": "photo_reference_catalog"
+    },
+    {
+      "line": 32,
+      "source": "plugin_bootstrap",
+      "target": "plugin_identity"
+    },
+    {
+      "line": 35,
+      "source": "plugin_bootstrap",
+      "target": "proactive_chat_runtime_bridge"
+    },
+    {
+      "line": 37,
+      "source": "plugin_bootstrap",
+      "target": "relationship_affinity_runtime"
+    },
+    {
+      "line": 36,
+      "source": "plugin_bootstrap",
+      "target": "relationship_ledger"
+    },
+    {
+      "line": 38,
+      "source": "plugin_bootstrap",
+      "target": "relationship_policy"
+    },
+    {
+      "line": 42,
+      "source": "plugin_bootstrap",
+      "target": "runtime_compat"
+    },
+    {
+      "line": 46,
+      "source": "plugin_bootstrap",
+      "target": "segmented_message"
+    },
+    {
+      "line": 47,
+      "source": "plugin_bootstrap",
+      "target": "story_authority"
+    },
+    {
+      "line": 48,
+      "source": "plugin_bootstrap",
+      "target": "unified_person_registry"
+    },
+    {
+      "line": 13,
+      "source": "plugin_lifecycle",
+      "target": "helpers"
+    },
+    {
+      "line": 14,
+      "source": "plugin_lifecycle",
+      "target": "logging_util"
+    },
+    {
+      "line": 32,
+      "source": "private_image",
+      "target": "conversation_injection_plan"
+    },
+    {
+      "line": 36,
+      "source": "private_image",
+      "target": "helpers"
+    },
+    {
+      "line": 45,
+      "source": "private_image",
+      "target": "logging_util"
+    },
+    {
+      "line": 37,
+      "source": "private_image",
+      "target": "persona_config"
+    },
+    {
+      "line": 5671,
+      "source": "private_image",
+      "target": "proactive_message"
+    },
+    {
+      "line": 38,
+      "source": "private_image",
+      "target": "segmented_message"
+    },
+    {
+      "line": 5,
+      "source": "private_reading",
+      "target": "reading_archive"
+    },
+    {
+      "line": 115,
+      "source": "proactive",
+      "target": "companion_interaction_expression"
+    },
+    {
+      "line": 74,
+      "source": "proactive",
+      "target": "constants"
+    },
+    {
+      "line": 90,
+      "source": "proactive",
+      "target": "dreaming"
+    },
+    {
+      "line": 106,
+      "source": "proactive",
+      "target": "helpers"
+    },
+    {
+      "line": 132,
+      "source": "proactive",
+      "target": "logging_util"
+    },
+    {
+      "line": 120,
+      "source": "proactive",
+      "target": "planning"
+    },
+    {
+      "line": 117,
+      "source": "proactive",
+      "target": "proactive_routes"
+    },
+    {
+      "line": 114,
+      "source": "proactive",
+      "target": "relationship_policy"
+    },
+    {
+      "line": 118,
+      "source": "proactive",
+      "target": "unified_profile_service"
+    },
+    {
+      "line": 119,
+      "source": "proactive",
+      "target": "unified_profile_service"
+    },
+    {
+      "line": 116,
+      "source": "proactive",
+      "target": "user_rest_gate"
+    },
+    {
+      "line": 17,
+      "source": "proactive_chat_runtime_bridge",
+      "target": "logging_util"
+    },
+    {
+      "line": 74,
+      "source": "proactive_engine",
+      "target": "constants"
+    },
+    {
+      "line": 90,
+      "source": "proactive_engine",
+      "target": "dreaming"
+    },
+    {
+      "line": 106,
+      "source": "proactive_engine",
+      "target": "helpers"
+    },
+    {
+      "line": 122,
+      "source": "proactive_engine",
+      "target": "logging_util"
+    },
+    {
+      "line": 107,
+      "source": "proactive_engine",
+      "target": "memory_context_policy"
+    },
+    {
+      "line": 121,
+      "source": "proactive_engine",
+      "target": "persona_config"
+    },
+    {
+      "line": 108,
+      "source": "proactive_engine",
+      "target": "planning"
+    },
+    {
+      "line": 120,
+      "source": "proactive_engine",
+      "target": "proactive_routes"
+    },
+    {
+      "line": 87,
+      "source": "proactive_message",
+      "target": "constants"
+    },
+    {
+      "line": 74,
+      "source": "proactive_message",
+      "target": "conversation_prompt_section"
+    },
+    {
+      "line": 103,
+      "source": "proactive_message",
+      "target": "dreaming"
+    },
+    {
+      "line": 144,
+      "source": "proactive_message",
+      "target": "final_response_persistence"
+    },
+    {
+      "line": 125,
+      "source": "proactive_message",
+      "target": "helpers"
+    },
+    {
+      "line": 236,
+      "source": "proactive_message",
+      "target": "logging_util"
+    },
+    {
+      "line": 143,
+      "source": "proactive_message",
+      "target": "memory_context_policy"
+    },
+    {
+      "line": 235,
+      "source": "proactive_message",
+      "target": "persona_config"
+    },
+    {
+      "line": 182,
+      "source": "proactive_message",
+      "target": "photo_prompt_context"
+    },
+    {
+      "line": 176,
+      "source": "proactive_message",
+      "target": "photo_reference_catalog"
+    },
+    {
+      "line": 188,
+      "source": "proactive_message",
+      "target": "photo_reference_feedback"
+    },
+    {
+      "line": 189,
+      "source": "proactive_message",
+      "target": "photo_reference_intent"
+    },
+    {
+      "line": 203,
+      "source": "proactive_message",
+      "target": "photo_reference_plan"
+    },
+    {
+      "line": 197,
+      "source": "proactive_message",
+      "target": "photo_reference_selection"
+    },
+    {
+      "line": 215,
+      "source": "proactive_message",
+      "target": "photo_wardrobe_decision"
+    },
+    {
+      "line": 148,
+      "source": "proactive_message",
+      "target": "planning"
+    },
+    {
+      "line": 234,
+      "source": "proactive_message",
+      "target": "proactive_routes"
+    },
+    {
+      "line": 172,
+      "source": "proactive_message",
+      "target": "reaction_expression"
+    },
+    {
+      "line": 119,
+      "source": "proactive_message",
+      "target": "reference_asset_gate"
+    },
+    {
+      "line": 210,
+      "source": "proactive_message",
+      "target": "reference_assets"
+    },
+    {
+      "line": 161,
+      "source": "proactive_message",
+      "target": "scene_context"
+    },
+    {
+      "line": 162,
+      "source": "proactive_message",
+      "target": "segmented_message"
+    },
+    {
+      "line": 171,
+      "source": "proactive_message",
+      "target": "token_budget"
+    },
+    {
+      "line": 7,
+      "source": "prompt_surface",
+      "target": "conversation_prompt_section"
+    },
+    {
+      "line": 13,
+      "source": "prompt_surface",
+      "target": "helpers"
+    },
+    {
+      "line": 10,
+      "source": "qzone_auth",
+      "target": "helpers"
+    },
+    {
+      "line": 12,
+      "source": "qzone_auth",
+      "target": "logging_util"
+    },
+    {
+      "line": 11,
+      "source": "qzone_auth",
+      "target": "qzone_recent_parser"
+    },
+    {
+      "line": 13,
+      "source": "qzone_comments",
+      "target": "helpers"
+    },
+    {
+      "line": 15,
+      "source": "qzone_comments",
+      "target": "logging_util"
+    },
+    {
+      "line": 14,
+      "source": "qzone_comments",
+      "target": "persona_config"
+    },
+    {
+      "line": 6,
+      "source": "qzone_contract",
+      "target": "companion.contracts"
+    },
+    {
+      "line": 8,
+      "source": "qzone_contract",
+      "target": "companion.contracts"
+    },
+    {
+      "line": 6,
+      "source": "qzone_contract",
+      "target": "companion.contracts.qzone_contract"
+    },
+    {
+      "line": 8,
+      "source": "qzone_contract",
+      "target": "companion.contracts.qzone_contract"
+    },
+    {
+      "line": 15,
+      "source": "qzone_feed",
+      "target": "helpers"
+    },
+    {
+      "line": 18,
+      "source": "qzone_feed",
+      "target": "logging_util"
+    },
+    {
+      "line": 16,
+      "source": "qzone_feed",
+      "target": "persona_config"
+    },
+    {
+      "line": 17,
+      "source": "qzone_feed",
+      "target": "qzone_recent_parser"
+    },
+    {
+      "line": 13,
+      "source": "qzone_integration",
+      "target": "qzone_comments"
+    },
+    {
+      "line": 15,
+      "source": "qzone_integration",
+      "target": "qzone_errors"
+    },
+    {
+      "line": 14,
+      "source": "qzone_integration",
+      "target": "qzone_feed"
+    },
+    {
+      "line": 16,
+      "source": "qzone_integration",
+      "target": "qzone_media"
+    },
+    {
+      "line": 17,
+      "source": "qzone_integration",
+      "target": "qzone_publish"
+    },
+    {
+      "line": 18,
+      "source": "qzone_integration",
+      "target": "qzone_runtime"
+    },
+    {
+      "line": 19,
+      "source": "qzone_integration",
+      "target": "qzone_schedule"
+    },
+    {
+      "line": 20,
+      "source": "qzone_media",
+      "target": "helpers"
+    },
+    {
+      "line": 23,
+      "source": "qzone_media",
+      "target": "logging_util"
+    },
+    {
+      "line": 21,
+      "source": "qzone_media",
+      "target": "qzone_auth"
+    },
+    {
+      "line": 22,
+      "source": "qzone_media",
+      "target": "qzone_errors"
+    },
+    {
+      "line": 14,
+      "source": "qzone_publish",
+      "target": "helpers"
+    },
+    {
+      "line": 16,
+      "source": "qzone_publish",
+      "target": "logging_util"
+    },
+    {
+      "line": 15,
+      "source": "qzone_publish",
+      "target": "persona_config"
+    },
+    {
+      "line": 10,
+      "source": "qzone_recent_parser",
+      "target": "qzone_json"
+    },
+    {
+      "line": 15,
+      "source": "qzone_runtime",
+      "target": "helpers"
+    },
+    {
+      "line": 18,
+      "source": "qzone_runtime",
+      "target": "logging_util"
+    },
+    {
+      "line": 17,
+      "source": "qzone_runtime",
+      "target": "qzone_errors"
+    },
+    {
+      "line": 16,
+      "source": "qzone_runtime",
+      "target": "qzone_json"
+    },
+    {
+      "line": 15,
+      "source": "qzone_schedule",
+      "target": "helpers"
+    },
+    {
+      "line": 17,
+      "source": "qzone_schedule",
+      "target": "logging_util"
+    },
+    {
+      "line": 16,
+      "source": "qzone_schedule",
+      "target": "persona_config"
+    },
+    {
+      "line": 18,
+      "source": "reaction_asset_library",
+      "target": "helpers"
+    },
+    {
+      "line": 19,
+      "source": "reaction_asset_library",
+      "target": "reaction_asset_index"
+    },
+    {
+      "line": 20,
+      "source": "reaction_asset_library",
+      "target": "reaction_asset_usage"
+    },
+    {
+      "line": 11,
+      "source": "reaction_expression",
+      "target": "helpers"
+    },
+    {
+      "line": 15,
+      "source": "reading_archive",
+      "target": "helpers"
+    },
+    {
+      "line": 6,
+      "source": "reality_companion_bridge",
+      "target": "companion.integrations"
+    },
+    {
+      "line": 8,
+      "source": "reality_companion_bridge",
+      "target": "companion.integrations"
+    },
+    {
+      "line": 6,
+      "source": "reality_companion_bridge",
+      "target": "companion.integrations.reality_companion_bridge"
+    },
+    {
+      "line": 8,
+      "source": "reality_companion_bridge",
+      "target": "companion.integrations.reality_companion_bridge"
+    },
+    {
+      "line": 24,
+      "source": "relationship_account_store",
+      "target": "identity_namespace"
+    },
+    {
+      "line": 33,
+      "source": "relationship_account_store",
+      "target": "identity_namespace"
+    },
+    {
+      "line": 31,
+      "source": "relationship_account_store",
+      "target": "relationship_event_policy"
+    },
+    {
+      "line": 40,
+      "source": "relationship_account_store",
+      "target": "relationship_event_policy"
+    },
+    {
+      "line": 25,
+      "source": "relationship_account_store",
+      "target": "relationship_ledger"
+    },
+    {
+      "line": 34,
+      "source": "relationship_account_store",
+      "target": "relationship_ledger"
+    },
+    {
+      "line": 30,
+      "source": "relationship_account_store",
+      "target": "relationship_policy"
+    },
+    {
+      "line": 39,
+      "source": "relationship_account_store",
+      "target": "relationship_policy"
+    },
+    {
+      "line": 9,
+      "source": "relationship_affinity_runtime",
+      "target": "identity_namespace"
+    },
+    {
+      "line": 13,
+      "source": "relationship_affinity_runtime",
+      "target": "identity_namespace"
+    },
+    {
+      "line": 10,
+      "source": "relationship_affinity_runtime",
+      "target": "relationship_account_store"
+    },
+    {
+      "line": 14,
+      "source": "relationship_affinity_runtime",
+      "target": "relationship_account_store"
+    },
+    {
+      "line": 11,
+      "source": "relationship_affinity_runtime",
+      "target": "relationship_event_policy"
+    },
+    {
+      "line": 15,
+      "source": "relationship_affinity_runtime",
+      "target": "relationship_event_policy"
+    },
+    {
+      "line": 9,
+      "source": "relationship_event_policy",
+      "target": "identity_namespace"
+    },
+    {
+      "line": 11,
+      "source": "relationship_event_policy",
+      "target": "identity_namespace"
+    },
+    {
+      "line": 16,
+      "source": "relationship_ledger",
+      "target": "relationship_policy"
+    },
+    {
+      "line": 23,
+      "source": "relationship_ledger",
+      "target": "relationship_policy"
+    },
+    {
+      "line": 4,
+      "source": "reply_temperature",
+      "target": "domains.affect.reply_temperature"
+    },
+    {
+      "line": 6,
+      "source": "reply_temperature",
+      "target": "domains.affect.reply_temperature"
+    },
+    {
+      "line": 9,
+      "source": "runtime_config_dispatcher",
+      "target": "helpers"
+    },
+    {
+      "line": 10,
+      "source": "runtime_config_dispatcher",
+      "target": "persona_config"
+    },
+    {
+      "line": 4,
+      "source": "runtime_lookup",
+      "target": "persona_config"
+    },
+    {
+      "line": 12,
+      "source": "scene_context",
+      "target": "conversation_prompt_section"
+    },
+    {
+      "line": 10,
+      "source": "scene_context",
+      "target": "helpers"
+    },
+    {
+      "line": 11,
+      "source": "scene_context",
+      "target": "persona_config"
+    },
+    {
+      "line": 16,
+      "source": "schedule_reconciler",
+      "target": "agenda_contracts"
+    },
+    {
+      "line": 26,
+      "source": "schedule_reconciler",
+      "target": "agenda_contracts"
+    },
+    {
+      "line": 12,
+      "source": "scoped_runtime_view",
+      "target": "expression_scope_ownership"
+    },
+    {
+      "line": 14,
+      "source": "scoped_runtime_view",
+      "target": "expression_scope_ownership"
+    },
+    {
+      "line": 9,
+      "source": "segmented_message",
+      "target": "persona_config"
+    },
+    {
+      "line": 8,
+      "source": "self_timeline",
+      "target": "helpers"
+    },
+    {
+      "line": 6,
+      "source": "state_views",
+      "target": "helpers"
+    },
+    {
+      "line": 7,
+      "source": "state_views",
+      "target": "persona_config"
+    },
+    {
+      "line": 7,
+      "source": "storage.factory",
+      "target": "storage.json_backend"
+    },
+    {
+      "line": 8,
+      "source": "storage.factory",
+      "target": "storage.sqlite_backend"
+    },
+    {
+      "line": 14,
+      "source": "storage.json_backend",
+      "target": "storage.backend_base"
+    },
+    {
+      "line": 15,
+      "source": "storage.json_backend",
+      "target": "storage.path_generation"
+    },
+    {
+      "line": 9,
+      "source": "storage.migration",
+      "target": "logging_util"
+    },
+    {
+      "line": 8,
+      "source": "storage.migration",
+      "target": "storage.sqlite_backend"
+    },
+    {
+      "line": 18,
+      "source": "storage.sqlite_backend",
+      "target": "logging_util"
+    },
+    {
+      "line": 17,
+      "source": "storage.sqlite_backend",
+      "target": "storage.backend_base"
+    },
+    {
+      "line": 17,
+      "source": "storage.store_manager",
+      "target": "logging_util"
+    },
+    {
+      "line": 11,
+      "source": "storage.store_manager",
+      "target": "storage"
+    },
+    {
+      "line": 12,
+      "source": "storage.store_manager",
+      "target": "storage.factory"
+    },
+    {
+      "line": 13,
+      "source": "storage.store_manager",
+      "target": "storage.json_backend"
+    },
+    {
+      "line": 14,
+      "source": "storage.store_manager",
+      "target": "storage.migration"
+    },
+    {
+      "line": 15,
+      "source": "storage.store_manager",
+      "target": "storage.path_generation"
+    },
+    {
+      "line": 16,
+      "source": "storage.store_manager",
+      "target": "storage.sqlite_backend"
+    },
+    {
+      "line": 17,
+      "source": "story_authority",
+      "target": "story_migration_contract"
+    },
+    {
+      "line": 11,
+      "source": "story_handoff",
+      "target": "story_authority"
+    },
+    {
+      "line": 16,
+      "source": "story_handoff",
+      "target": "story_migration_contract"
+    },
+    {
+      "line": 12,
+      "source": "token_budget",
+      "target": "constants"
+    },
+    {
+      "line": 18,
+      "source": "token_budget",
+      "target": "helpers"
+    },
+    {
+      "line": 21,
+      "source": "token_budget",
+      "target": "logging_util"
+    },
+    {
+      "line": 19,
+      "source": "token_budget",
+      "target": "model_routing"
+    },
+    {
+      "line": 20,
+      "source": "token_budget",
+      "target": "persona_config"
+    },
+    {
+      "line": 30,
+      "source": "tts_enhancement",
+      "target": "conversation_injection_plan"
+    },
+    {
+      "line": 35,
+      "source": "tts_enhancement",
+      "target": "helpers"
+    },
+    {
+      "line": 50,
+      "source": "tts_enhancement",
+      "target": "logging_util"
+    },
+    {
+      "line": 43,
+      "source": "tts_enhancement",
+      "target": "persona_config"
+    },
+    {
+      "line": 44,
+      "source": "tts_enhancement",
+      "target": "segmented_message"
+    },
+    {
+      "line": 10,
+      "source": "tts_tool_sanitizer",
+      "target": "helpers"
+    },
+    {
+      "line": 18,
+      "source": "tts_tool_sanitizer",
+      "target": "logging_util"
+    },
+    {
+      "line": 16,
+      "source": "tts_tool_sanitizer",
+      "target": "persona_config"
+    },
+    {
+      "line": 17,
+      "source": "tts_tool_sanitizer",
+      "target": "segmented_message"
+    },
+    {
+      "line": 14,
+      "source": "unified_agenda",
+      "target": "agenda_contracts"
+    },
+    {
+      "line": 23,
+      "source": "unified_agenda",
+      "target": "agenda_contracts"
+    },
+    {
+      "line": 21,
+      "source": "unified_agenda",
+      "target": "schedule_reconciler"
+    },
+    {
+      "line": 30,
+      "source": "unified_agenda",
+      "target": "schedule_reconciler"
+    },
+    {
+      "line": 29,
+      "source": "unified_person_registry",
+      "target": "identity_namespace"
+    },
+    {
+      "line": 40,
+      "source": "unified_person_registry",
+      "target": "identity_namespace"
+    },
+    {
+      "line": 28,
+      "source": "unified_person_registry",
+      "target": "p4_affinity_confinement"
+    },
+    {
+      "line": 39,
+      "source": "unified_person_registry",
+      "target": "p4_affinity_confinement"
+    },
+    {
+      "line": 20,
+      "source": "unified_person_registry",
+      "target": "person_context_contract"
+    },
+    {
+      "line": 31,
+      "source": "unified_person_registry",
+      "target": "person_context_contract"
+    },
+    {
+      "line": 8,
+      "source": "unified_profile_service",
+      "target": "unified_profile_contract"
+    },
+    {
+      "line": 114,
+      "source": "user_memory",
+      "target": "authoritative_private_memory"
+    },
+    {
+      "line": 121,
+      "source": "user_memory",
+      "target": "companion_interaction_expression"
+    },
+    {
+      "line": 141,
+      "source": "user_memory",
+      "target": "companion_memory_records"
+    },
+    {
+      "line": 74,
+      "source": "user_memory",
+      "target": "constants"
+    },
+    {
+      "line": 91,
+      "source": "user_memory",
+      "target": "conversation_prompt_section"
+    },
+    {
+      "line": 125,
+      "source": "user_memory",
+      "target": "domains.affect.emotion_event_ledger"
+    },
+    {
+      "line": 127,
+      "source": "user_memory",
+      "target": "domains.affect.emotion_targeting"
+    },
+    {
+      "line": 126,
+      "source": "user_memory",
+      "target": "domains.affect.interaction_dynamics"
+    },
+    {
+      "line": 92,
+      "source": "user_memory",
+      "target": "dreaming"
+    },
+    {
+      "line": 110,
+      "source": "user_memory",
+      "target": "expression_scope_ownership"
+    },
+    {
+      "line": 108,
+      "source": "user_memory",
+      "target": "helpers"
+    },
+    {
+      "line": 140,
+      "source": "user_memory",
+      "target": "logging_util"
+    },
+    {
+      "line": 90,
+      "source": "user_memory",
+      "target": "persona_config"
+    },
+    {
+      "line": 128,
+      "source": "user_memory",
+      "target": "planning"
+    },
+    {
+      "line": 109,
+      "source": "user_memory",
+      "target": "relationship_policy"
+    },
+    {
+      "line": 120,
+      "source": "user_memory",
+      "target": "scoped_runtime_view"
+    },
+    {
+      "line": 11,
+      "source": "user_rest_gate",
+      "target": "helpers"
+    },
+    {
+      "line": 12,
+      "source": "user_rest_gate",
+      "target": "logging_util"
+    },
+    {
+      "line": 74,
+      "source": "worldbook",
+      "target": "constants"
+    },
+    {
+      "line": 90,
+      "source": "worldbook",
+      "target": "dreaming"
+    },
+    {
+      "line": 106,
+      "source": "worldbook",
+      "target": "helpers"
+    },
+    {
+      "line": 120,
+      "source": "worldbook",
+      "target": "logging_util"
+    },
+    {
+      "line": 107,
+      "source": "worldbook",
+      "target": "persona_config"
+    },
+    {
+      "line": 108,
+      "source": "worldbook",
+      "target": "planning"
+    }
+  ],
+  "failures": {
+    "new_cross_domain_dependencies": [],
+    "new_cycle_sccs": [],
+    "new_meaningless_managers": [],
+    "new_reverse_giant_mixin_dependencies": [],
+    "parse_errors": []
+  },
+  "giant_mixins": [
+    {
+      "lines": 913,
+      "methods": 30,
+      "module": "agenda_runtime",
+      "name": "AgendaRuntimeMixin"
+    },
+    {
+      "lines": 1190,
+      "methods": 48,
+      "module": "atrelay",
+      "name": "AtRelayMixin"
+    },
+    {
+      "lines": 667,
+      "methods": 26,
+      "module": "balance_awareness",
+      "name": "BalanceAwarenessMixin"
+    },
+    {
+      "lines": 5917,
+      "methods": 117,
+      "module": "command_handlers",
+      "name": "CommandHandlersMixin"
+    },
+    {
+      "lines": 994,
+      "methods": 27,
+      "module": "companion.integrations.image_companion_bridge",
+      "name": "ImageCompanionBridgeMixin"
+    },
+    {
+      "lines": 729,
+      "methods": 23,
+      "module": "content_companion_bridge",
+      "name": "ContentCompanionBridgeMixin"
+    },
+    {
+      "lines": 5314,
+      "methods": 158,
+      "module": "core_store",
+      "name": "CoreStoreMixin"
+    },
+    {
+      "lines": 2133,
+      "methods": 54,
+      "module": "creative",
+      "name": "CreativeMixin"
+    },
+    {
+      "lines": 1602,
+      "methods": 41,
+      "module": "daily_review",
+      "name": "DailyReviewMixin"
+    },
+    {
+      "lines": 18033,
+      "methods": 555,
+      "module": "daily_state",
+      "name": "DailyStateMixin"
+    },
+    {
+      "lines": 2261,
+      "methods": 6,
+      "module": "daily_state_tick",
+      "name": "DailyStateTickMixin"
+    },
+    {
+      "lines": 5795,
+      "methods": 166,
+      "module": "event_dispatch",
+      "name": "EventDispatchMixin"
+    },
+    {
+      "lines": 986,
+      "methods": 31,
+      "module": "final_response_persistence",
+      "name": "FinalResponsePersistenceMixin"
+    },
+    {
+      "lines": 2223,
+      "methods": 50,
+      "module": "forward_message",
+      "name": "ForwardMessageMixin"
+    },
+    {
+      "lines": 1158,
+      "methods": 37,
+      "module": "game_integration",
+      "name": "GameIntegrationMixin"
+    },
+    {
+      "lines": 959,
+      "methods": 24,
+      "module": "group_member_safety",
+      "name": "GroupMemberSafetyMixin"
+    },
+    {
+      "lines": 4260,
+      "methods": 91,
+      "module": "group_observation",
+      "name": "GroupObservationMixin"
+    },
+    {
+      "lines": 1343,
+      "methods": 34,
+      "module": "group_wakeup",
+      "name": "GroupWakeupMixin"
+    },
+    {
+      "lines": 1276,
+      "methods": 44,
+      "module": "integration_status",
+      "name": "IntegrationStatusMixin"
+    },
+    {
+      "lines": 8748,
+      "methods": 145,
+      "module": "llm_tool_actions",
+      "name": "LlmToolActionsMixin"
+    },
+    {
+      "lines": 3537,
+      "methods": 85,
+      "module": "memory_companion_adapter",
+      "name": "MemoryCompanionAdapterMixin"
+    },
+    {
+      "lines": 4474,
+      "methods": 123,
+      "module": "news_exploration",
+      "name": "NewsExplorationMixin"
+    },
+    {
+      "lines": 516,
+      "methods": 19,
+      "module": "page_api_qzone",
+      "name": "PrivateCompanionPageApiQzoneMixin"
+    },
+    {
+      "lines": 1349,
+      "methods": 8,
+      "module": "page_api_settings",
+      "name": "PageSettingNormalizerMixin"
+    },
+    {
+      "lines": 2038,
+      "methods": 46,
+      "module": "page_api_users_groups",
+      "name": "PrivateCompanionPageApiUsersGroupsMixin"
+    },
+    {
+      "lines": 6135,
+      "methods": 175,
+      "module": "private_image",
+      "name": "PrivateImageMixin"
+    },
+    {
+      "lines": 4188,
+      "methods": 153,
+      "module": "proactive",
+      "name": "ProactiveMixin"
+    },
+    {
+      "lines": 10320,
+      "methods": 256,
+      "module": "proactive_engine",
+      "name": "ProactiveEngineMixin"
+    },
+    {
+      "lines": 17322,
+      "methods": 398,
+      "module": "proactive_message",
+      "name": "ProactiveMessageMixin"
+    },
+    {
+      "lines": 847,
+      "methods": 25,
+      "module": "qzone_comments",
+      "name": "QzoneCommentMixin"
+    },
+    {
+      "lines": 562,
+      "methods": 19,
+      "module": "qzone_feed",
+      "name": "QzoneFeedMixin"
+    },
+    {
+      "lines": 728,
+      "methods": 18,
+      "module": "qzone_media",
+      "name": "QzoneMediaMixin"
+    },
+    {
+      "lines": 1188,
+      "methods": 24,
+      "module": "qzone_publish",
+      "name": "QzonePublishMixin"
+    },
+    {
+      "lines": 825,
+      "methods": 36,
+      "module": "qzone_runtime",
+      "name": "QzoneRuntimeMixin"
+    },
+    {
+      "lines": 1285,
+      "methods": 31,
+      "module": "qzone_schedule",
+      "name": "QzoneScheduleMixin"
+    },
+    {
+      "lines": 1333,
+      "methods": 19,
+      "module": "scene_context",
+      "name": "SceneContextMixin"
+    },
+    {
+      "lines": 638,
+      "methods": 25,
+      "module": "self_timeline",
+      "name": "SelfTimelineMixin"
+    },
+    {
+      "lines": 1829,
+      "methods": 49,
+      "module": "token_budget",
+      "name": "TokenBudgetMixin"
+    },
+    {
+      "lines": 5642,
+      "methods": 135,
+      "module": "tts_enhancement",
+      "name": "TtsEnhancementMixin"
+    },
+    {
+      "lines": 10423,
+      "methods": 272,
+      "module": "user_memory",
+      "name": "UserMemoryMixin"
+    },
+    {
+      "lines": 1526,
+      "methods": 42,
+      "module": "worldbook",
+      "name": "WorldbookMixin"
+    }
+  ],
+  "manager_candidates": [],
+  "policy": {
+    "cross_domain": "domains.<owner> may not import another domain or a giant runtime mixin",
+    "giant_mixin_min_lines": 500,
+    "giant_mixin_min_methods": 30,
+    "thin_module_max_lines": 30
+  },
+  "schema_version": 1,
+  "summary": {
+    "added_modules": 0,
+    "cycle_sccs": 1,
+    "edges": 640,
+    "gate_failures": 0,
+    "modules": 223
+  },
+  "thin_wrapper_candidates": []
+}

@@ -1,0 +1,342 @@
+{
+  "schema_version": 1,
+  "baseline": "1db3748797844abe42d057a354cf79c4df732c5c",
+  "note": "Static, import-free audit of selected current worktrees. Thin wrappers and managers are reported only for modules added relative to baseline. Existing agenda/calendar SCC is inherited unless branch has integrated round3.",
+  "branches": [
+    {
+      "branch_file": "audit_db-legacy-compat-20260901",
+      "candidate": "0cd50d0c86d2b01553e0516fef74f530b69e0597",
+      "base": "1db3748797844abe42d057a354cf79c4df732c5c",
+      "summary": {
+        "added_modules": 0,
+        "cycle_sccs": 1,
+        "edges": 640,
+        "gate_failures": 0,
+        "modules": 223
+      },
+      "failure_counts": {
+        "new_cross_domain_dependencies": 0,
+        "new_cycle_sccs": 0,
+        "new_meaningless_managers": 0,
+        "new_reverse_giant_mixin_dependencies": 0,
+        "parse_errors": 0
+      },
+      "cycle_sccs": [
+        [
+          "agenda_contracts",
+          "calendar_contracts",
+          "companion.contracts.calendar_contracts"
+        ]
+      ],
+      "cross_domain_dependencies": [],
+      "new_reverse_giant_mixin_dependencies": [],
+      "thin_wrapper_candidates": [],
+      "manager_candidates": []
+    },
+    {
+      "branch_file": "fix_req041-replay-timeout",
+      "candidate": "bda363dfa26f3b1c1016e63fdf46d1f5df991f96",
+      "base": "1db3748797844abe42d057a354cf79c4df732c5c",
+      "summary": {
+        "added_modules": 0,
+        "cycle_sccs": 1,
+        "edges": 640,
+        "gate_failures": 0,
+        "modules": 223
+      },
+      "failure_counts": {
+        "new_cross_domain_dependencies": 0,
+        "new_cycle_sccs": 0,
+        "new_meaningless_managers": 0,
+        "new_reverse_giant_mixin_dependencies": 0,
+        "parse_errors": 0
+      },
+      "cycle_sccs": [
+        [
+          "agenda_contracts",
+          "calendar_contracts",
+          "companion.contracts.calendar_contracts"
+        ]
+      ],
+      "cross_domain_dependencies": [],
+      "new_reverse_giant_mixin_dependencies": [],
+      "thin_wrapper_candidates": [],
+      "manager_candidates": []
+    },
+    {
+      "branch_file": "refactor_command-phase4-next",
+      "candidate": "9e5a484af23b0f2af3200a0049437c15230c573f",
+      "base": "1db3748797844abe42d057a354cf79c4df732c5c",
+      "summary": {
+        "added_modules": 1,
+        "cycle_sccs": 1,
+        "edges": 643,
+        "gate_failures": 0,
+        "modules": 224
+      },
+      "failure_counts": {
+        "new_cross_domain_dependencies": 0,
+        "new_cycle_sccs": 0,
+        "new_meaningless_managers": 0,
+        "new_reverse_giant_mixin_dependencies": 0,
+        "parse_errors": 0
+      },
+      "cycle_sccs": [
+        [
+          "agenda_contracts",
+          "calendar_contracts",
+          "companion.contracts.calendar_contracts"
+        ]
+      ],
+      "cross_domain_dependencies": [],
+      "new_reverse_giant_mixin_dependencies": [],
+      "thin_wrapper_candidates": [],
+      "manager_candidates": []
+    },
+    {
+      "branch_file": "refactor_daily-state-round5-sleep",
+      "candidate": "b980c57c127ad18061b9405e9f3fa46cde42248f",
+      "base": "1db3748797844abe42d057a354cf79c4df732c5c",
+      "summary": {
+        "added_modules": 1,
+        "cycle_sccs": 1,
+        "edges": 641,
+        "gate_failures": 0,
+        "modules": 224
+      },
+      "failure_counts": {
+        "new_cross_domain_dependencies": 0,
+        "new_cycle_sccs": 0,
+        "new_meaningless_managers": 0,
+        "new_reverse_giant_mixin_dependencies": 0,
+        "parse_errors": 0
+      },
+      "cycle_sccs": [
+        [
+          "agenda_contracts",
+          "calendar_contracts",
+          "companion.contracts.calendar_contracts"
+        ]
+      ],
+      "cross_domain_dependencies": [],
+      "new_reverse_giant_mixin_dependencies": [],
+      "thin_wrapper_candidates": [],
+      "manager_candidates": []
+    },
+    {
+      "branch_file": "refactor_llm-tool-phase5",
+      "candidate": "43de95d7292b5f71b70f9c183d057d68c8199de3",
+      "base": "1db3748797844abe42d057a354cf79c4df732c5c",
+      "summary": {
+        "added_modules": 0,
+        "cycle_sccs": 1,
+        "edges": 640,
+        "gate_failures": 0,
+        "modules": 223
+      },
+      "failure_counts": {
+        "new_cross_domain_dependencies": 0,
+        "new_cycle_sccs": 0,
+        "new_meaningless_managers": 0,
+        "new_reverse_giant_mixin_dependencies": 0,
+        "parse_errors": 0
+      },
+      "cycle_sccs": [
+        [
+          "agenda_contracts",
+          "calendar_contracts",
+          "companion.contracts.calendar_contracts"
+        ]
+      ],
+      "cross_domain_dependencies": [],
+      "new_reverse_giant_mixin_dependencies": [],
+      "thin_wrapper_candidates": [],
+      "manager_candidates": []
+    },
+    {
+      "branch_file": "refactor_main-slim-event-round5",
+      "candidate": "f2bb2cbb10495a50a3fef1345292531190fd1076",
+      "base": "1db3748797844abe42d057a354cf79c4df732c5c",
+      "summary": {
+        "added_modules": 2,
+        "cycle_sccs": 1,
+        "edges": 646,
+        "gate_failures": 0,
+        "modules": 225
+      },
+      "failure_counts": {
+        "new_cross_domain_dependencies": 0,
+        "new_cycle_sccs": 0,
+        "new_meaningless_managers": 0,
+        "new_reverse_giant_mixin_dependencies": 0,
+        "parse_errors": 0
+      },
+      "cycle_sccs": [
+        [
+          "agenda_contracts",
+          "calendar_contracts",
+          "companion.contracts.calendar_contracts"
+        ]
+      ],
+      "cross_domain_dependencies": [],
+      "new_reverse_giant_mixin_dependencies": [],
+      "thin_wrapper_candidates": [],
+      "manager_candidates": []
+    },
+    {
+      "branch_file": "refactor_main-slim-round5",
+      "candidate": "572be08cef21738489c41ae1a8afbab074039f5c",
+      "base": "1db3748797844abe42d057a354cf79c4df732c5c",
+      "summary": {
+        "added_modules": 1,
+        "cycle_sccs": 1,
+        "edges": 641,
+        "gate_failures": 0,
+        "modules": 224
+      },
+      "failure_counts": {
+        "new_cross_domain_dependencies": 0,
+        "new_cycle_sccs": 0,
+        "new_meaningless_managers": 0,
+        "new_reverse_giant_mixin_dependencies": 0,
+        "parse_errors": 0
+      },
+      "cycle_sccs": [
+        [
+          "agenda_contracts",
+          "calendar_contracts",
+          "companion.contracts.calendar_contracts"
+        ]
+      ],
+      "cross_domain_dependencies": [],
+      "new_reverse_giant_mixin_dependencies": [],
+      "thin_wrapper_candidates": [],
+      "manager_candidates": []
+    },
+    {
+      "branch_file": "refactor_photo-domain-round3",
+      "candidate": "42401cbdf70adee0c1ab1152e4c96ca6cc496999",
+      "base": "1db3748797844abe42d057a354cf79c4df732c5c",
+      "summary": {
+        "added_modules": 7,
+        "cycle_sccs": 1,
+        "edges": 660,
+        "gate_failures": 0,
+        "modules": 234
+      },
+      "failure_counts": {
+        "new_cross_domain_dependencies": 0,
+        "new_cycle_sccs": 0,
+        "new_meaningless_managers": 0,
+        "new_reverse_giant_mixin_dependencies": 0,
+        "parse_errors": 0
+      },
+      "cycle_sccs": [
+        [
+          "agenda_contracts",
+          "calendar_contracts",
+          "companion.contracts.calendar_contracts"
+        ]
+      ],
+      "cross_domain_dependencies": [],
+      "new_reverse_giant_mixin_dependencies": [],
+      "thin_wrapper_candidates": [
+        {
+          "classification": "small-policy-seam",
+          "definitions": [
+            "render_composition_constraint"
+          ],
+          "lines": 24,
+          "module": "photo_prompt_composition"
+        },
+        {
+          "classification": "small-policy-seam",
+          "definitions": [
+            "PhotoPromptSection",
+            "ResolvedPhotoPromptContext"
+          ],
+          "lines": 26,
+          "module": "photo_prompt_model"
+        },
+        {
+          "classification": "small-policy-seam",
+          "definitions": [
+            "collect_negative_prompt"
+          ],
+          "lines": 20,
+          "module": "photo_prompt_negative"
+        },
+        {
+          "classification": "small-policy-seam",
+          "definitions": [
+            "preview",
+            "audit"
+          ],
+          "lines": 8,
+          "module": "photo_prompt_trace"
+        }
+      ],
+      "manager_candidates": []
+    },
+    {
+      "branch_file": "refactor_proactive-state-machine-round5",
+      "candidate": "a29f6736d45805df8e1a524cb4155952f4cb5c19",
+      "base": "1db3748797844abe42d057a354cf79c4df732c5c",
+      "summary": {
+        "added_modules": 1,
+        "cycle_sccs": 1,
+        "edges": 642,
+        "gate_failures": 0,
+        "modules": 224
+      },
+      "failure_counts": {
+        "new_cross_domain_dependencies": 0,
+        "new_cycle_sccs": 0,
+        "new_meaningless_managers": 0,
+        "new_reverse_giant_mixin_dependencies": 0,
+        "parse_errors": 0
+      },
+      "cycle_sccs": [
+        [
+          "agenda_contracts",
+          "calendar_contracts",
+          "companion.contracts.calendar_contracts"
+        ]
+      ],
+      "cross_domain_dependencies": [],
+      "new_reverse_giant_mixin_dependencies": [],
+      "thin_wrapper_candidates": [],
+      "manager_candidates": []
+    },
+    {
+      "branch_file": "refactor_user-memory-round5",
+      "candidate": "13427cb78055550dc1bd00da5af8e22068948ccd",
+      "base": "1db3748797844abe42d057a354cf79c4df732c5c",
+      "summary": {
+        "added_modules": 3,
+        "cycle_sccs": 1,
+        "edges": 646,
+        "gate_failures": 0,
+        "modules": 226
+      },
+      "failure_counts": {
+        "new_cross_domain_dependencies": 0,
+        "new_cycle_sccs": 0,
+        "new_meaningless_managers": 0,
+        "new_reverse_giant_mixin_dependencies": 0,
+        "parse_errors": 0
+      },
+      "cycle_sccs": [
+        [
+          "agenda_contracts",
+          "calendar_contracts",
+          "companion.contracts.calendar_contracts"
+        ]
+      ],
+      "cross_domain_dependencies": [],
+      "new_reverse_giant_mixin_dependencies": [],
+      "thin_wrapper_candidates": [],
+      "manager_candidates": []
+    }
+  ]
+}
