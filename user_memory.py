@@ -138,6 +138,7 @@ from .planning import (
     pick_detail_segment,
 )
 from .logging_util import get_module_logger
+from .companion_memory_records import normalize_memory_items, relevant_memory_items
 
 logger = get_module_logger(__name__)
 
@@ -272,56 +273,23 @@ class UserMemoryMixin:
         memory = user.get("companion_memory")
         if not isinstance(memory, dict):
             return []
-        items = memory.get("items")
-        if not isinstance(items, list):
-            memory["items"] = []
-            return []
-        now = _now_ts()
-        deduped: list[dict[str, Any]] = []
-        seen: set[str] = set()
-        for raw in items:
-            if not isinstance(raw, dict):
-                continue
-            text = _single_line(raw.get("text"), 260)
-            if not text:
-                continue
-            created_ts = _safe_float(raw.get("created_ts"), 0)
-            created_at = _single_line(raw.get("created_at"), 24)
-            if created_ts <= 0 and created_at:
-                try:
-                    created_ts = datetime.strptime(created_at, "%Y-%m-%d %H:%M").timestamp()
-                except Exception:
-                    created_ts = now
-            if created_ts > 0 and now - created_ts > 180 * 86400:
-                continue
-            signature = self._memory_fact_signature(text)
-            if not signature or signature in seen:
-                continue
-            seen.add(signature)
-            item = dict(raw)
-            item["text"] = text
-            item["created_ts"] = created_ts or now
-            deduped.append(item)
-        deduped.sort(key=lambda item: (_safe_int(item.get("weight"), 1, 0), _safe_float(item.get("created_ts"), 0)), reverse=True)
-        memory["items"] = deduped[: runtime_persona_setting(self, "max_companion_memory_items", 36)]
-        return memory["items"]
+        items = normalize_memory_items(
+            memory.get("items"),
+            now=_now_ts(),
+            max_items=runtime_persona_setting(self, "max_companion_memory_items", 36),
+            signature_for=self._memory_fact_signature,
+        )
+        # This assignment is the compatibility persistence boundary: callers have
+        # always observed the normalized list in companion_memory.items.
+        memory["items"] = items
+        return items
 
     def _companion_memory_relevant_items(self, user: dict[str, Any], *, hint: str = "", limit: int = 6) -> list[dict[str, Any]]:
-        items = self._cleanup_companion_memory_items(user)
-        if not items:
-            return []
-        hint_text = _single_line(hint, 260).lower()
-        if not hint_text:
-            return items[: max(1, limit)]
-        weighted: list[tuple[int, dict[str, Any]]] = []
-        for item in items:
-            text = _single_line(item.get("text"), 260).lower()
-            score = _safe_int(item.get("weight"), 1, 0)
-            if text and any(token and token in hint_text for token in re.findall(r"[\u4e00-\u9fff]{2,8}|[a-z0-9_]{3,24}", text)):
-                score += 4
-            weighted.append((score, item))
-        weighted.sort(key=lambda pair: (pair[0], _safe_float(pair[1].get("created_ts"), 0)), reverse=True)
-        return [item for _, item in weighted[: max(1, limit)]]
+        return relevant_memory_items(
+            self._cleanup_companion_memory_items(user),
+            hint=hint,
+            limit=limit,
+        )
 
     def _relationship_profile(self, user: dict[str, Any]) -> dict[str, Any]:
         """Compatibility DTO projected from the unified relationship authority."""
