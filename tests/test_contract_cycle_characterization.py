@@ -1,4 +1,4 @@
-﻿# -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 """Characterize the public and compatibility surfaces around agenda/calendar."""
 from __future__ import annotations
 

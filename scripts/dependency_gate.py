@@ -1,4 +1,4 @@
-﻿#!/usr/bin/env python3
+#!/usr/bin/env python3
 """Build and gate the repository's static Python module dependency graph.
 
 The analysis is deliberately import-free: source files are parsed with ``ast``
