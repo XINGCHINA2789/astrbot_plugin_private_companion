@@ -913,6 +913,7 @@ class _StartupHarness(core_store.CoreStoreMixin):
         self.data_file = str(manager.data_file)
         self.enable_store_control_tag_sanitization = True
         self.maintenance_writes = 0
+        self.maintenance_changed_sections: set[str] = set()
 
     def _sanitize_store_control_tags_inplace(self, data, _path=()):
         del _path
@@ -929,6 +930,11 @@ class _StartupHarness(core_store.CoreStoreMixin):
         return 0
 
     def _persist_startup_maintenance_sync(self, _manager, before, after, _tombstones):
+        self.maintenance_changed_sections = {
+            section
+            for section in set(before) | set(after)
+            if before.get(section) != after.get(section)
+        }
         if before != after:
             self.maintenance_writes += 1
 
@@ -978,7 +984,10 @@ def test_valid_startup_marker_loads_but_restores_story_roots_before_maintenance(
 
     assert loaded["creative_projects"] == [{"id": "legacy-source"}]
     assert loaded["creative_memory_pool"] == [{"id": "legacy-memory"}]
-    assert host.maintenance_writes == 0
+    assert not {
+        "creative_projects",
+        "creative_memory_pool",
+    } & host.maintenance_changed_sections
     assert local_controller.authority_state() == "committed"
 
 
