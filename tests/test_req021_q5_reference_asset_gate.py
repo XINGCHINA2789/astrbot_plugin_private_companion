@@ -136,7 +136,7 @@ class ReferenceAssetGateTests(unittest.TestCase):
         ticket = gate.issue(plan, backend="external")
         self.assertIsNotNone(ticket)
 
-        now[0] += 91.0
+        now[0] += 90.0
         paths, consumed = gate.consume(
             ticket,
             generation_id="expiring-generation",
