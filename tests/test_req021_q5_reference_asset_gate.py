@@ -119,30 +119,29 @@ class ReferenceAssetGateTests(unittest.TestCase):
         self.assertNotIn("sensitive-path", encoded)
         self.assertEqual("identity", projection["items"][0]["role"])
 
-    def test_runtime_and_panel_have_only_q5_gate_call_sites(self) -> None:
-        image_spec = find_spec("astrbot_plugin_image_companion")
-        image_root = (
-            Path(image_spec.origin).resolve().parent
-            if image_spec is not None and image_spec.origin
-            else None
+    def test_reference_asset_gate_exposes_one_shot_local_capability(self) -> None:
+        """Validate behavior without guessing which optional runtime is installed."""
+        identity = self._entry("identity-runtime.png", "identity")
+        plan, status = self.gate.plan(
+            [identity], generation_id="runtime-contract", mode="new_topic"
         )
-        runtime_path = (
-            image_root / "image_runtime.py"
-            if image_root is not None
-            else ROOT / "proactive_message.py"
+        self.assertEqual("ok", status)
+        self.assertIsNotNone(plan)
+        ticket = self.gate.issue(plan, backend="external")
+        self.assertIsNotNone(ticket)
+        paths, consumed = self.gate.consume(
+            ticket,
+            generation_id="runtime-contract",
+            backend="external",
+            capacity=1,
         )
-        proactive = runtime_path.read_text(encoding="utf-8")
-        page_api = (ROOT / "page_api.py").read_text(encoding="utf-8")
-        frontend = (ROOT / "pages" / "陪伴面板" / "app.js").read_text(encoding="utf-8")
-        self.assertIn("reference_asset_ticket", proactive)
-        self.assertIn("structured_reference_count", proactive)
-        if image_root is not None:
-            companion = (ROOT / "proactive_message.py").read_text(encoding="utf-8")
-            self.assertIn("_image_companion_generate", companion)
-            self.assertNotIn("reference_asset_ticket", companion)
-        self.assertIn("_q5_structured_reference_asset_projection", page_api)
-        self.assertIn("structuredReferenceAssetStatusHtml", frontend)
-
-
-if __name__ == "__main__":
-    unittest.main()
+        self.assertEqual("ok", consumed)
+        self.assertEqual([str(self.asset_dir / "identity-runtime.png")], paths)
+        repeated, repeated_status = self.gate.consume(
+            ticket,
+            generation_id="runtime-contract",
+            backend="external",
+            capacity=1,
+        )
+        self.assertEqual([], repeated)
+        self.assertEqual("expired_or_consumed_ticket", repeated_status)
