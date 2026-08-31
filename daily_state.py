@@ -119,6 +119,22 @@ from .conversation_injection_plan import (
 )
 from .domains.affect.affect_modulation import compose_affect_modulation
 from .daily_state_tick import DailyStateTickMixin
+from .daily_state_domains import (
+    build_health_causes,
+    infer_location_from_text,
+    is_sleepy_plan_item,
+    minutes_to_hhmm,
+    normalize_schedule_basis,
+    normalize_schedule_lifecycle_status,
+    normalized_plan_item_starts,
+    parse_hhmm_to_minutes,
+    parse_sleep_delay_until_ts,
+    pick_health_spec,
+    schedule_window_runtime_status,
+    sleep_delay_cn_number,
+    sleep_delay_parse_minute,
+    sleep_phase_label,
+)
 from .memo_notes import memo_note_due_state, memo_note_sort_key, normalize_memo_note
 from .agenda_contracts import normalize_plan_item
 from .planning import (
@@ -4503,48 +4519,24 @@ class DailyStateMixin(DailyStateTickMixin):
         weather_text: str,
         diary_tags: set[str],
     ) -> list[str]:
-        causes: list[str] = []
-        if sleep_label not in {"睡眠平稳", "睡得很踏实"} and random.random() < 0.7:
-            causes.append("昨晚没睡踏实")
-        if any(tag in diary_tags for tag in {"失眠", "低能量"}) and random.random() < 0.45:
-            causes.append("前一天状态就有点透支")
-        weather_lower = str(weather_text or "").lower()
-        if any(token in weather_text for token in ("降雨", "小雨", "中雨", "大雨", "阴", "多云")) and random.random() < 0.4:
-            causes.append("空气有点潮,身上那股乏劲更明显")
-        if any(token in weather_text for token in ("风", "降温", "冷")) and random.random() < 0.55:
-            causes.append("吹了点风,身上容易发空")
-        temp_match = re.search(r"(-?\d+(?:\.\d+)?)\s*°C", weather_lower)
-        if temp_match:
-            try:
-                temp = float(temp_match.group(1))
-            except ValueError:
-                temp = 20.0
-            if temp <= 10 and random.random() < 0.55:
-                causes.append("天气偏冷,早上容易着凉")
-            elif temp >= 30 and random.random() < 0.35:
-                causes.append("天气闷热,整个人有点蔫")
-        return causes
+        return build_health_causes(
+            sleep_label=sleep_label,
+            weather_text=weather_text,
+            diary_tags=diary_tags,
+            random_value=random.random,
+        )
 
     def _pick_health_spec(
         self, causes: list[str], intensity: float, weather_text: str
     ) -> tuple[str, str, int, int, str] | None:
-        if not causes:
-            return None
-        chance = min(0.42, 0.12 + len(causes) * 0.1 * max(0.5, intensity))
-        if random.random() > chance:
-            return None
-        cause_text = ",".join(dict.fromkeys(causes[:2]))
-        pool = [
-            ("喉咙有点发紧,今天想少说重话", "安静", -10, 24),
-            ("头有点沉,做事想放慢一点", "疲惫", -14, 18),
-            ("像有点发虚,反应会慢半拍", "疲惫", -18, 30),
-        ]
-        label, mood, energy_delta, duration_hours = random.choice(pool)
-        if "闷热" in cause_text and "喉咙" in label:
-            label = "有点发闷,只想把动作放轻一点"
-        if "潮" in cause_text and "头有点沉" in label:
-            label = "身上有点沉,今天想把事情做轻一点"
-        return label, mood, energy_delta, duration_hours, cause_text
+        # ``weather_text`` stays in the compatibility signature; cause
+        # derivation already incorporated it before this selection step.
+        return pick_health_spec(
+            causes,
+            intensity,
+            random_value=random.random,
+            choose=random.choice,
+        )
 
     def _build_transition_options(
         self,
@@ -10191,30 +10183,7 @@ class DailyStateMixin(DailyStateTickMixin):
         return 24 * 60 + now_minutes
 
     def _is_sleepy_plan_item(self, item: dict[str, Any] | None) -> bool:
-        if not isinstance(item, dict):
-            return False
-        text = " ".join(
-            _single_line(item.get(key), 100)
-            for key in ("activity", "mood", "message_seed")
-            if _single_line(item.get(key), 100)
-        )
-        if not text:
-            return False
-        if re.search(r"继续睡|睡回去|重新入睡|再次入睡|回笼觉", text):
-            return True
-        if re.search(
-            r"自然醒|睡醒|醒来|醒后|刚醒|醒了|已醒|醒着|清醒|睁眼|起床|起身|洗漱|"
-            r"不睡|没睡|未睡|还没睡|睡不着|失眠",
-            text,
-        ):
-            return False
-        return bool(
-            re.search(
-                r"睡觉|睡眠|入睡|熟睡|浅睡|午睡|午休|小睡|补觉|回笼觉|打盹|"
-                r"眯(?:一|半)?会(?:儿)?|梦乡|被窝|准备睡|睡前|继续睡|睡回去|熄灯休息",
-                text,
-            )
-        )
+        return is_sleepy_plan_item(item)
 
     def _segment_end_minutes(
         self,
@@ -10251,21 +10220,7 @@ class DailyStateMixin(DailyStateTickMixin):
         return self._segment_end_minutes(start, item)
 
     def _normalized_plan_item_starts(self, items: Any) -> list[int | None]:
-        if not isinstance(items, list):
-            return []
-        normalized: list[int | None] = []
-        day_offset = 0
-        previous_raw: int | None = None
-        for item in items:
-            raw = self._parse_hhmm_to_minutes(item.get("time")) if isinstance(item, dict) else None
-            if raw is None:
-                normalized.append(None)
-                continue
-            if previous_raw is not None and raw < previous_raw:
-                day_offset += 24 * 60
-            normalized.append(raw + day_offset)
-            previous_raw = raw
-        return normalized
+        return normalized_plan_item_starts(items)
 
     def _normalize_plan_item_intervals(self, items: Any) -> bool:
         if not isinstance(items, list):
@@ -10298,26 +10253,11 @@ class DailyStateMixin(DailyStateTickMixin):
 
     @staticmethod
     def _normalize_schedule_lifecycle_status(value: Any) -> str:
-        aliases = {
-            "planned": "planned", "计划": "planned", "未开始": "planned",
-            "active": "active", "进行": "active", "进行中": "active",
-            "completed": "completed", "完成": "completed", "已完成": "completed",
-            "changed": "changed", "变更": "changed", "已变更": "changed",
-            "cancelled": "cancelled", "canceled": "cancelled", "取消": "cancelled", "已取消": "cancelled",
-            "deferred": "deferred", "postponed": "deferred", "顺延": "deferred", "延期": "deferred",
-        }
-        return aliases.get(_single_line(value, 20).lower(), "")
+        return normalize_schedule_lifecycle_status(value)
 
     @staticmethod
     def _normalize_schedule_basis(value: Any, *, default: list[str] | None = None) -> list[str]:
-        allowed = {"calendar", "persona", "adjustment", "state", "weather", "continuity", "inspiration", "coarse_plan"}
-        raw = value if isinstance(value, list) else re.split(r"[,，;；\s]+", str(value or ""))
-        result: list[str] = []
-        for item in raw:
-            key = _single_line(item, 24).lower()
-            if key in allowed and key not in result:
-                result.append(key)
-        return result[:3] or list(default or [])[:3]
+        return normalize_schedule_basis(value, default=default)
 
     def _schedule_window_runtime_status(
         self,
@@ -10327,26 +10267,16 @@ class DailyStateMixin(DailyStateTickMixin):
         plan_date: str = "",
         explicit_status: Any = "",
     ) -> str:
-        explicit = self._normalize_schedule_lifecycle_status(explicit_status)
-        if explicit == "cancelled":
-            return explicit
         date_text = _single_line(plan_date, 16)
         now_minutes = self._effective_plan_now_minutes(date_text) if date_text else self._environment_now_minutes()
-        if now_minutes is None:
-            today = _today_key()
-            return "completed" if date_text and date_text < today else "planned"
-        normalized_end = int(end)
-        if normalized_end <= start:
-            normalized_end += 24 * 60
-        if now_minutes < start:
-            runtime = "planned"
-        elif now_minutes >= normalized_end:
-            runtime = "completed"
-        else:
-            runtime = "active"
-        if explicit == "changed" and runtime != "completed":
-            return "changed"
-        return runtime
+        return schedule_window_runtime_status(
+            start,
+            end,
+            explicit_status=explicit_status,
+            now_minutes=now_minutes,
+            date_text=date_text,
+            today_key=_today_key(),
+        )
 
     def _plan_item_runtime_status(self, plan: dict[str, Any], item: dict[str, Any], index: int = -1) -> str:
         # Lifecycle display must come from canonical evidence, never from the
@@ -10418,18 +10348,10 @@ class DailyStateMixin(DailyStateTickMixin):
         )
 
     def _parse_hhmm_to_minutes(self, value: Any) -> int | None:
-        match = re.fullmatch(r"\s*(\d{1,2}):(\d{2})\s*", str(value or ""))
-        if not match:
-            return None
-        hour, minute = int(match.group(1)), int(match.group(2))
-        if hour > 23 or minute > 59:
-            return None
-        return hour * 60 + minute
+        return parse_hhmm_to_minutes(value)
 
     def _minutes_to_hhmm(self, minutes: int) -> str:
-        minutes = max(0, int(minutes))
-        wrapped = minutes % (24 * 60)
-        return f"{wrapped // 60:02d}:{wrapped % 60:02d}"
+        return minutes_to_hhmm(minutes)
 
     async def _generate_daily_plan(self) -> dict[str, Any]:
         await self._ensure_yesterday_conversation_summary()
@@ -11422,15 +11344,7 @@ class DailyStateMixin(DailyStateTickMixin):
 
     @staticmethod
     def _sleep_phase_label(phase: str) -> str:
-        return {
-            "awake": "清醒",
-            "falling_asleep": "入睡中",
-            "light_sleep": "浅睡",
-            "woken": "被叫醒",
-            "staying_up": "临时晚睡",
-            "sleeping_again": "继续睡",
-            "natural_wake": "自然醒",
-        }.get(str(phase or ""), "清醒")
+        return sleep_phase_label(phase)
 
     def _sleep_runtime_state(self) -> dict[str, Any]:
         state = self.data.setdefault("daily_state", {})
@@ -11473,36 +11387,11 @@ class DailyStateMixin(DailyStateTickMixin):
 
     @staticmethod
     def _sleep_delay_cn_number(value: Any) -> int | None:
-        text = str(value or "").strip().replace("兩", "两").replace("〇", "零")
-        if not text:
-            return None
-        if text.isdigit():
-            return int(text)
-        digits = {"零": 0, "一": 1, "二": 2, "两": 2, "三": 3, "四": 4, "五": 5, "六": 6, "七": 7, "八": 8, "九": 9}
-        if text in digits:
-            return digits[text]
-        if "十" in text:
-            left, _, right = text.partition("十")
-            tens = digits.get(left, 1) if left else 1
-            ones = digits.get(right, 0) if right else 0
-            return tens * 10 + ones
-        return None
+        return sleep_delay_cn_number(value)
 
     @classmethod
     def _sleep_delay_parse_minute(cls, value: Any) -> int:
-        text = str(value or "").strip()
-        if not text:
-            return 0
-        if text == "半":
-            return 30
-        if text == "一刻":
-            return 15
-        if text == "三刻":
-            return 45
-        parsed = cls._sleep_delay_cn_number(text)
-        if parsed is None:
-            return 0
-        return max(0, min(59, parsed))
+        return sleep_delay_parse_minute(value)
 
     def _sleep_delay_next_local_ts(self, hour: int, minute: int, *, now_dt: datetime | None = None) -> float:
         current = now_dt or self._environment_now()
@@ -11516,46 +11405,12 @@ class DailyStateMixin(DailyStateTickMixin):
 
     def _parse_sleep_delay_until_ts(self, compact: str, *, now_dt: datetime | None = None) -> tuple[float, bool]:
         current = now_dt or self._environment_now()
-        hour_token = r"(?:\d{1,2}|[零〇一二两兩三四五六七八九十]{1,3})"
-        minute_token = r"(?:\d{1,2}|[零〇一二两兩三四五六七八九十]{1,3}|半|一刻|三刻)"
-        match = re.search(
-            rf"(?:陪(?:我|着我)?到|陪到|撑到|等到|到|至)"
-            rf"(凌晨|半夜|今晚|今夜|夜里|晚上|明早|明天早上|明天)?"
-            rf"({hour_token})(?:[:：点點时])({minute_token})?",
+        return parse_sleep_delay_until_ts(
             compact,
+            current=current,
+            next_local_ts=lambda hour, minute: self._sleep_delay_next_local_ts(hour, minute, now_dt=current),
+            fromtimestamp=self._environment_fromtimestamp,
         )
-        if not match:
-            return 0.0, False
-        period = str(match.group(1) or "")
-        hour = self._sleep_delay_cn_number(match.group(2))
-        if hour is None:
-            return 0.0, False
-        minute = self._sleep_delay_parse_minute(match.group(3))
-        if period in {"凌晨", "半夜"}:
-            if hour == 12:
-                hour = 0
-        elif period in {"今晚", "今夜", "夜里", "晚上"}:
-            if hour == 12:
-                hour = 0
-            elif 6 <= hour <= 11:
-                hour += 12
-        elif period in {"明早", "明天早上"}:
-            if hour == 12:
-                hour = 0
-        elif current.hour >= 18:
-            if hour == 12:
-                hour = 0
-            elif 6 <= hour <= 11:
-                hour += 12
-        if hour > 23:
-            return 0.0, False
-        target_ts = self._sleep_delay_next_local_ts(hour, minute, now_dt=current)
-        if period in {"明早", "明天早上"}:
-            target_dt = self._environment_fromtimestamp(target_ts)
-            if target_dt.date() == current.date():
-                target_ts = (target_dt + timedelta(days=1)).timestamp()
-        explicit_cap = min(current.timestamp() + 6 * 3600, self._sleep_delay_next_local_ts(6, 0, now_dt=current))
-        return min(target_ts, explicit_cap), True
 
     def _detect_sleep_delay_request(self, text: str) -> dict[str, Any] | None:
         normalized = _single_line(text, 220)
@@ -12266,21 +12121,7 @@ class DailyStateMixin(DailyStateTickMixin):
                 story_plan[key] = kept
 
     def _infer_location_from_text(self, text: str) -> str:
-        normalized = _single_line(text, 200)
-        if not normalized:
-            return ""
-        location_rules = [
-            (("被窝", "床上", "床边", "卧室", "房间", "书桌", "台灯", "家里", "客厅", "沙发", "洗漱台", "餐桌"), "家里"),
-            (("教室", "课间", "食堂", "校门", "走廊", "操场", "上课", "下课", "自习", "老师", "书包", "制服"), "学校"),
-            (("工位", "会议", "办公室", "上班", "下班", "通勤", "打卡"), "工作场所"),
-            (("便利店", "超市", "商店"), "便利店附近"),
-            (("路上", "街上", "出门", "楼下", "外面", "街边", "回家路上", "校门口"), "外面"),
-            (("楼梯口", "走廊栏杆", "窗边", "阳台"), "过道或窗边"),
-        ]
-        for keywords, label in location_rules:
-            if any(keyword in normalized for keyword in keywords):
-                return label
-        return ""
+        return infer_location_from_text(text)
 
     def _infer_location_from_plan_context(
         self,
