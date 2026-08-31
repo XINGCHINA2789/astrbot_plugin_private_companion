@@ -182,20 +182,8 @@ class ImageCompanionBridgeMixin:
                 replacement = self._image_companion_api_fresh()
                 if replacement is not candidate:
                     return self._image_companion_contract(api=replacement, _refreshed=True)
-            # Older Image releases expose the complete legacy generation
-            # surface but no descriptor. Keep them usable in a visibly
-            # degraded mode; the formal task path remains unavailable.
-            candidate_type = type(candidate)
-            candidate_module = getattr(candidate_type, "__module__", "")
-            legacy_identity = (
-                getattr(candidate, "plugin_id", "") == _IMAGE_PLUGIN_ID
-                or (
-                    candidate_type.__name__ == "ImageCompanionExtensionAPI"
-                    and "astrbot_plugin_image_companion" in candidate_module
-                )
-            )
-            if legacy_identity and callable(getattr(candidate, "generate_for_companion", None)):
-                return "legacy_compat", candidate, 0, "legacy_api_compat"
+            # Descriptorless owner-injection APIs are retired. Capability must
+            # be declared by the formal contract, not inferred from Python identity.
             return "incompatible", candidate, 0, "descriptor_method_missing"
 
         try:
@@ -275,22 +263,12 @@ class ImageCompanionBridgeMixin:
         ):
             return "incompatible", candidate, generation, "version_descriptor_incompatible"
         if _IMAGE_ACTIVE_EXECUTION_CAPABILITY not in capabilities:
-            try:
-                compatibility_generator = getattr(
-                    candidate,
-                    "generate_for_companion",
-                    None,
-                )
-            except Exception:
-                compatibility_generator = None
-            if not callable(compatibility_generator):
-                return (
-                    "incompatible",
-                    candidate,
-                    generation,
-                    "active_execution_unavailable",
-                )
-            return "current_compat", candidate, generation, "active_execution_inactive"
+            return (
+                "incompatible",
+                candidate,
+                generation,
+                "active_execution_unavailable",
+            )
         return "current", candidate, generation, ""
 
     def _image_require_current_api(self, api: Any, generation: int) -> None:

@@ -8,12 +8,22 @@ from types import SimpleNamespace
 
 import pytest
 
-ImageGenerationRuntime = pytest.importorskip(
-    "astrbot_plugin_image_companion.image_runtime"
-).ImageGenerationRuntime
-ImagePhotoReference = pytest.importorskip(
-    "astrbot_plugin_image_companion.photo_reference_catalog"
-).PhotoReference
+try:
+    from astrbot_plugin_image_companion.image_runtime import ImageGenerationRuntime
+    from astrbot_plugin_image_companion.photo_reference_catalog import (
+        PhotoReference as ImagePhotoReference,
+    )
+except ImportError:
+    ImageGenerationRuntime = None
+    ImagePhotoReference = None
+
+_IMAGE_RUNTIME_REQUIRED = pytest.mark.skipif(
+    ImageGenerationRuntime is None,
+    reason=(
+        "real astrbot_plugin_image_companion runtime is not installed; "
+        "bridge capability-degradation tests remain mandatory"
+    ),
+)
 from astrbot_plugin_private_companion.image_companion_bridge import (
     ImageCompanionBridgeMixin,
 )
@@ -204,6 +214,7 @@ def _isolate_reference_candidates(runtime, monkeypatch) -> None:
         monkeypatch.setattr(runtime, name, lambda **_kwargs: [])
 
 
+@_IMAGE_RUNTIME_REQUIRED
 @pytest.mark.asyncio
 async def test_split_runtime_accepts_private_companion_reference_catalog(
     tmp_path: Path,
@@ -255,6 +266,7 @@ async def test_split_runtime_accepts_private_companion_reference_catalog(
     assert by_id["sleepwear"]["outfit_lock_default"] is True
 
 
+@_IMAGE_RUNTIME_REQUIRED
 @pytest.mark.asyncio
 async def test_split_runtime_accepts_image_service_reference_catalog(
     tmp_path: Path,
@@ -303,6 +315,7 @@ async def test_split_runtime_accepts_image_service_reference_catalog(
     )
 
 
+@_IMAGE_RUNTIME_REQUIRED
 @pytest.mark.asyncio
 async def test_split_runtime_preserves_owner_user_cleared_catalog(
     tmp_path: Path,
@@ -337,6 +350,7 @@ async def test_split_runtime_preserves_owner_user_cleared_catalog(
     assert candidates == []
 
 
+@_IMAGE_RUNTIME_REQUIRED
 @pytest.mark.asyncio
 async def test_split_runtime_preserves_legacy_fallback_without_catalog(
     tmp_path: Path,
@@ -371,6 +385,7 @@ async def test_split_runtime_preserves_legacy_fallback_without_catalog(
     assert Path(candidates[0]["path"]) == legacy_persona.resolve()
 
 
+@_IMAGE_RUNTIME_REQUIRED
 @pytest.mark.asyncio
 async def test_split_runtime_never_writes_remote_catalog_back_to_owner(
     tmp_path: Path,
@@ -425,6 +440,7 @@ async def test_split_runtime_never_writes_remote_catalog_back_to_owner(
     assert Path(candidate["path"]) == stable_path.resolve()
 
 
+@_IMAGE_RUNTIME_REQUIRED
 @pytest.mark.asyncio
 async def test_split_runtime_does_not_write_service_catalog_to_owner(
     tmp_path: Path,
@@ -583,7 +599,7 @@ async def test_current_image_contract_uses_owner_free_task_and_transient_bytes(
 
 
 @pytest.mark.asyncio
-async def test_formal_image_legacy_rollout_uses_explicit_compatibility_method(
+async def test_formal_image_without_active_execution_reports_capability_degradation(
     tmp_path: Path,
 ) -> None:
     compatibility_calls: list[tuple[object, dict[str, object]]] = []
@@ -613,28 +629,16 @@ async def test_formal_image_legacy_rollout_uses_explicit_compatibility_method(
         session_key="test",
     )
 
-    assert result == (
-        "legacy-rollout",
-        str((tmp_path / "legacy.png").resolve()),
-        "compatibility",
-    )
-    assert compatibility_calls == [
-        (
-            harness,
-            {
-                "workflow_kind": "selfie",
-                "prompt_text": "test",
-                "session_key": "test",
-            },
-        )
-    ]
+    assert result[1] == ""
+    assert "active_execution_unavailable" in result[2]
+    assert compatibility_calls == []
     assert api.import_requests == []
     assert api.builder_inputs == []
     assert api.executed_tasks == []
 
 
 @pytest.mark.asyncio
-async def test_formal_image_compatibility_hot_swap_rejects_old_generation(
+async def test_formal_image_inactive_execution_is_rejected_before_compatibility_call(
     tmp_path: Path,
 ) -> None:
     current: list[object] = []
@@ -667,7 +671,8 @@ async def test_formal_image_compatibility_hot_swap_rejects_old_generation(
     )
 
     assert result[1] == ""
-    assert "拒绝接受旧代结果" in result[2]
+    assert "active_execution_unavailable" in result[2]
+    assert current[0] is original
     assert replacement.executed_tasks == []
 
 
@@ -944,7 +949,7 @@ async def test_descriptorless_image_api_never_receives_companion_owner() -> None
 
 
 @pytest.mark.asyncio
-async def test_known_legacy_image_api_is_used_in_degraded_mode(tmp_path: Path) -> None:
+async def test_descriptorless_legacy_image_api_is_rejected_with_explicit_degradation(tmp_path: Path) -> None:
     calls: list[tuple[object, dict[str, object]]] = []
 
     class Api:
@@ -969,25 +974,15 @@ async def test_known_legacy_image_api_is_used_in_degraded_mode(tmp_path: Path) -
         session_key="test",
     )
 
-    assert result == (
-        "legacy",
-        str((tmp_path / "legacy.png").resolve()),
-        "legacy compatibility",
-    )
-    assert calls == [
-        (
-            harness,
-            {
-                "workflow_kind": "selfie",
-                "prompt_text": "take a picture",
-                "session_key": "test",
-            },
-        )
-    ]
-    assert harness._image_companion_status()["reason"] == "legacy_api_compat"
-    assert harness._image_companion_status()["degraded"] is True
+    assert result[1] == ""
+    assert "descriptor_method_missing" in result[2]
+    assert calls == []
+    status = harness._image_companion_status()
+    assert status["available"] is False
+    assert status["reason"] == "descriptor_method_missing"
 
 
+@_IMAGE_RUNTIME_REQUIRED
 @pytest.mark.asyncio
 async def test_split_runtime_does_not_call_owner_legacy_executor(monkeypatch) -> None:
     calls: list[dict[str, object]] = []
