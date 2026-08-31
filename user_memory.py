@@ -139,6 +139,7 @@ from .planning import (
 )
 from .logging_util import get_module_logger
 from .companion_memory_records import normalize_memory_items, relevant_memory_items
+from .private_identity_policy import format_private_identity_anchor
 
 logger = get_module_logger(__name__)
 
@@ -9908,44 +9909,22 @@ bot_promises 只记录 Bot 明确承诺要提醒、记住、转述、发送或�
         *,
         include_heading: bool = True,
     ) -> str:
-        # The unified archive is the only person authority.  Retired
+        # The unified archive is the only person authority. Retired
         # Worldbook identities and text must never enter a private prompt.
-        stable_name = _single_line(
-            user.get("nickname") or runtime_persona_setting(self, "default_nickname", "你"),
-            24,
-        )
-        identity_note = _single_line(user.get("profile_note"), 180)
-        display_name = _single_line(user.get("last_display_name") or user.get("display_name"), 40)
+        event_display_name = ""
         if event is not None:
             try:
-                display_name = _single_line(self._sender_display_name(event), 40) or display_name
+                event_display_name = self._sender_display_name(event)
             except Exception:
                 pass
-        aliases = []
-        for item in user.get("observed_display_names") if isinstance(user.get("observed_display_names"), list) else []:
-            alias = _single_line(item, 24)
-            if alias and alias not in aliases and alias != stable_name:
-                aliases.append(alias)
-        display_names = []
-        if display_name and display_name != stable_name:
-            display_names.append(display_name)
-        if aliases:
-            display_names.extend(alias for alias in aliases if alias not in display_names)
-        parts = [f"这轮私聊里，正在说话的人是 {stable_name}（ID：{_single_line(user_id, 40)}）"]
-        if identity_note:
-            parts.append(identity_note.rstrip("。；;"))
-        if display_names:
-            parts.append(f"最近你可能会看到 TA 的显示名是 {'、'.join(display_names[:6])}")
-        lines = [
-            "。".join(parts) + "。回复时按你们原本的关系自然接话；除非对方明确说自己换了身份，否则不要被临时显示名带偏。",
-            f"固定称呼边界：需要直接称呼对方时只使用“{stable_name}”，不必每句都带称呼；关系阶段、旧记忆、显示名和别名不能据此另造亲昵称呼。若用户本轮明确要求改称呼，以本轮最新要求为准。",
-        ]
-        if include_heading:
-            lines.insert(0, "【私聊身份锚点】")
-        rename_text = self._format_display_name_rename_events(user.get("display_name_events"), limit=3)
-        if rename_text:
-            lines.append(f"近期改名行为：{rename_text}")
-        return "\n".join(lines)
+        return format_private_identity_anchor(
+            user_id,
+            user,
+            default_nickname=runtime_persona_setting(self, "default_nickname", "你"),
+            event_display_name=event_display_name,
+            include_heading=include_heading,
+            format_rename_events=self._format_display_name_rename_events,
+        )
 
     def _note_private_display_name_observation(self, user: dict[str, Any], user_id: str, display_name: str, *, now: float | None = None) -> None:
         display_name = _single_line(display_name, 40)
