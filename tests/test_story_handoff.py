@@ -403,6 +403,8 @@ def test_valid_marker_recovery_survives_missing_content_without_reopening(local_
             {handoff.STORY_MIGRATION_COMMIT_KEY: marker}
         )
         plugin = _Plugin(None)
+        plugin.data[handoff.STORY_MIGRATION_COMMIT_KEY] = copy.deepcopy(marker)
+        plugin.persisted = copy.deepcopy(marker)
         with pytest.raises(authority.StoryAuthorityError) as unavailable:
             await handoff.resume_story_handoff(plugin)
         assert unavailable.value.code == "story_handoff_target_unavailable"
@@ -438,6 +440,26 @@ def test_missing_source_marker_cannot_be_unblocked_by_target_replay(
             {handoff.STORY_MIGRATION_COMMIT_KEY: marker}
         )
         assert local_controller.authority_state() == "committed"
+
+    asyncio.run(scenario())
+
+
+def test_resume_revalidates_live_source_marker_before_target_replay(
+    local_controller,
+) -> None:
+    async def scenario() -> None:
+        marker = _marker(_snapshot())
+        local_controller.recover_committed_marker(marker, source_verified=True)
+        target = _TargetApi({"status": _committed_status(marker)}, [])
+        plugin = _Plugin(target)
+        plugin.persisted = copy.deepcopy(marker)
+
+        with pytest.raises(authority.StoryAuthorityError) as missing:
+            await handoff.resume_story_handoff(plugin)
+
+        assert missing.value.code == "story_handoff_marker_missing"
+        assert local_controller.authority_state() == "blocked"
+        assert target.order == []
 
     asyncio.run(scenario())
 
