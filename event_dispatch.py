@@ -109,6 +109,7 @@ from .helpers import _date_key, _now_ts, _safe_float, _safe_int, _single_line, _
 from .persona_config import runtime_persona_setting
 from .model_routing import CURRENT_MODEL_REPLACEMENT_SOURCES, build_rules, find_route, scope_allows
 from .relationship_policy import relationship_stage_provider_id
+from .event_dispatch_core import classify_inbound_message, invoke_handler, iter_cache_entries, ordered_recall_ids
 
 _ON_WAITING_LLM_REQUEST = getattr(filter, "on_waiting_llm_request", None)
 if not callable(_ON_WAITING_LLM_REQUEST):
@@ -472,6 +473,23 @@ def _normalised_text_fingerprint(text: str, scope: str, route: str) -> str:
 
 
 class EventDispatchMixin:
+    async def _dispatch_event_handler(
+        self,
+        handler: Any,
+        *args: Any,
+        handler_name: str = "",
+        **kwargs: Any,
+    ) -> Any:
+        """Run one event handler while preserving cancellation semantics."""
+        name = handler_name or getattr(handler, "__name__", handler.__class__.__name__)
+        return await invoke_handler(
+            handler,
+            *args,
+            on_error=lambda exc: logger.exception(
+                "事件 handler 执行失败: handler=%s error=%s", name, _single_line(exc, 160)
+            ),
+            **kwargs,
+        )
     """事件分发"""
 
     def _event_raw_payload(self, event: AstrMessageEvent) -> dict[str, Any]:
@@ -860,16 +878,9 @@ class EventDispatchMixin:
         )
 
     def _event_is_inbound_chat_message(self, event: AstrMessageEvent) -> bool:
-        """Return whether *event* represents a real inbound chat message.
-
-        Some adapters expose ``notice``, ``request`` and outgoing
-        ``message_sent`` payloads as private/group message events.  Those
-        payloads must remain available to their dedicated handlers without
-        entering companion authorization, profile creation or reply paths.
-        """
+        """Return whether *event* represents a real inbound chat message."""
         raw = self._event_raw_payload(event)
         message_obj = getattr(event, "message_obj", None)
-
         echo_checker = getattr(self, "_event_is_recent_req036_denial_echo", None)
         if callable(echo_checker):
             try:
@@ -878,115 +889,34 @@ class EventDispatchMixin:
             except Exception:
                 pass
 
-        def field(owner: Any, name: str) -> Any:
-            if owner is None:
-                return None
-            if isinstance(owner, Mapping):
-                return owner.get(name)
-            try:
-                value = getattr(owner, name, None)
-            except Exception:
-                return None
-            if callable(value):
-                try:
-                    value = value()
-                except Exception:
-                    return None
-            return value
-
-        def marker_enabled(value: Any) -> bool:
-            if value is True:
-                return True
-            if type(value) in {int, float}:
-                return value == 1
-            if isinstance(value, str):
-                return value.strip().casefold() in {
-                    "1",
-                    "true",
-                    "yes",
-                    "on",
-                    "self",
-                    "outbound",
-                    "outgoing",
-                    "sent",
-                }
-            return False
-
-        # Some adapters map an outgoing delivery back to a normal ``message``
-        # event and even retain the recipient as sender.  Explicit direction
-        # markers are therefore authoritative and must be checked before
-        # ``post_type=message`` is accepted.
-        owners = (raw, event, message_obj)
-        for owner in owners:
-            if any(
-                marker_enabled(field(owner, name))
-                for name in ("is_self", "from_self", "is_outbound", "outbound", "is_sent")
-            ):
-                return False
-            for name in ("direction", "message_direction", "event_direction", "flow"):
-                direction = str(field(owner, name) or "").strip().casefold()
-                if direction in {"outbound", "outgoing", "send", "sent", "sending", "egress", "output"}:
-                    return False
-            for name in ("status", "message_status", "delivery_status"):
-                status = str(field(owner, name) or "").strip().casefold()
-                if status in {"outbound", "outgoing", "send", "sent", "sending", "delivered"}:
-                    return False
-
         def identity_text(*values: Any) -> str:
             for value in values:
-                if value is None:
-                    continue
-                try:
-                    text = str(value).strip()
-                except Exception:
-                    continue
-                if text:
-                    return text
+                if value is not None and str(value).strip():
+                    return str(value).strip()
             return ""
 
         sender_payload = raw.get("sender") if isinstance(raw.get("sender"), Mapping) else {}
-        message_sender = field(message_obj, "sender")
+        message_sender = getattr(message_obj, "sender", None) if message_obj is not None else None
         sender_id = identity_text(
-            raw.get("user_id"),
-            raw.get("sender_id"),
-            sender_payload.get("user_id"),
-            sender_payload.get("id"),
-            field(message_sender, "user_id"),
-            field(message_sender, "id"),
+            raw.get("user_id"), raw.get("sender_id"), sender_payload.get("user_id"),
+            sender_payload.get("id"), getattr(message_sender, "user_id", None),
+            getattr(message_sender, "id", None),
         )
         if not sender_id:
-            getter = getattr(event, "get_sender_id", None)
-            if callable(getter):
-                try:
-                    sender_id = identity_text(getter())
-                except Exception:
-                    sender_id = ""
-        self_id = identity_text(raw.get("self_id"), field(message_obj, "self_id"))
+            try:
+                sender_id = identity_text(event.get_sender_id())
+            except Exception:
+                pass
+        self_id = identity_text(raw.get("self_id"), getattr(message_obj, "self_id", None))
         if not self_id:
-            getter = getattr(event, "get_self_id", None)
-            if callable(getter):
-                try:
-                    self_id = identity_text(getter())
-                except Exception:
-                    self_id = ""
-        if sender_id and self_id and sender_id == self_id:
-            return False
-
-        post_type = str(raw.get("post_type") or "").strip().lower()
-        if post_type == "message":
-            return True
-        if post_type in {"notice", "request", "meta_event", "message_sent", "outbound", "send", "sent"}:
-            return False
-        if raw:
-            message_type = str(raw.get("message_type") or "").strip().lower()
-            if message_type in {"private", "group"}:
-                return True
-            if any(key in raw for key in ("notice_type", "request_type", "meta_event_type")):
-                return False
-        # Non-OneBot adapters do not necessarily expose a raw post_type.  The
-        # framework has already classified this event as a message, so retain
-        # that classification, including image/file-only messages with no text.
-        return True
+            try:
+                self_id = identity_text(event.get_self_id())
+            except Exception:
+                pass
+        classified = classify_inbound_message(
+            raw, event=event, message_obj=message_obj, sender_id=sender_id, self_id=self_id
+        )
+        return classified
 
     def _event_message_id(self, event: AstrMessageEvent) -> str:
         message_obj = getattr(event, "message_obj", None)
@@ -2115,29 +2045,34 @@ class EventDispatchMixin:
         removed_bytes = 0
 
         try:
-            iterator = list(root_resolved.rglob("*"))
+            iterator = iter_cache_entries(root_resolved)
+            for path, is_directory in iterator:
+                if is_directory:
+                    try:
+                        path.rmdir()
+                    except OSError:
+                        pass
+                    except Exception as exc:
+                        logger.debug("撤回图片空目录清理失败: path=%s error=%s", path, exc)
+                    continue
+                try:
+                    stat = path.stat()
+                    mtime = float(stat.st_mtime or 0)
+                    size = int(stat.st_size or 0)
+                    if now - mtime > ttl:
+                        try:
+                            path.unlink()
+                            removed_count += 1
+                            removed_bytes += size
+                        except Exception as exc:
+                            logger.debug("撤回图片过期缓存删除失败: path=%s error=%s", path, exc)
+                        continue
+                    files.append((mtime, size, path))
+                except Exception as exc:
+                    logger.debug("撤回图片缓存条目读取失败: path=%s error=%s", path, exc)
         except Exception as exc:
             logger.debug("撤回图片缓存扫描失败: %s", exc)
             return False
-
-        for path in iterator:
-            try:
-                if not path.is_file():
-                    continue
-                stat = path.stat()
-                mtime = float(stat.st_mtime or 0)
-                size = int(stat.st_size or 0)
-                if now - mtime > ttl:
-                    try:
-                        path.unlink()
-                        removed_count += 1
-                        removed_bytes += size
-                    except Exception as exc:
-                        logger.debug("撤回图片过期缓存删除失败: path=%s error=%s", path, exc)
-                    continue
-                files.append((mtime, size, path))
-            except Exception as exc:
-                logger.debug("撤回图片缓存条目读取失败: path=%s error=%s", path, exc)
 
         total_bytes = sum(size for _, size, _ in files)
         if max_bytes and total_bytes > max_bytes:
@@ -2151,14 +2086,6 @@ class EventDispatchMixin:
                     removed_bytes += size
                 except Exception as exc:
                     logger.debug("撤回图片容量缓存删除失败: path=%s error=%s", path, exc)
-
-        for directory in sorted((p for p in iterator if p.is_dir()), key=lambda p: len(p.parts), reverse=True):
-            try:
-                directory.rmdir()
-            except OSError:
-                pass
-            except Exception as exc:
-                logger.debug("撤回图片空目录清理失败: path=%s error=%s", directory, exc)
 
         if removed_count:
             logger.info(
@@ -2367,26 +2294,7 @@ class EventDispatchMixin:
             message_id = _single_line(message_id, 120)
             if message_id:
                 ids.append(message_id)
-        seen: set[str] = set()
-        unique: list[str] = []
-        for message_id in ids:
-            if message_id in seen:
-                continue
-            seen.add(message_id)
-            unique.append(message_id)
-        cache = getattr(self, "_recall_message_cache", None)
-        if isinstance(cache, dict):
-            for message_id in list(unique):
-                snapshot = cache.get(message_id)
-                nested_ids = snapshot.get("reply_message_ids") if isinstance(snapshot, dict) else None
-                if not isinstance(nested_ids, list):
-                    continue
-                for nested_id in nested_ids:
-                    nested = _single_line(nested_id, 120)
-                    if nested and nested not in seen:
-                        seen.add(nested)
-                        unique.append(nested)
-        return unique
+        return ordered_recall_ids(ids, getattr(self, "_recall_message_cache", None))
 
     def _event_reply_message_ids(self, event: AstrMessageEvent) -> list[str]:
         ids: list[str] = []
