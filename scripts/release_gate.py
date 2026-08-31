@@ -96,7 +96,14 @@ def load_builder(root: Path):
     if spec is None or spec.loader is None:
         raise RuntimeError(f"cannot load package builder: {path}")
     module = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(module)
+    # Loading the builder is validation, not a runtime import. Suppress its
+    # bytecode cache so auditing does not dirty an otherwise clean worktree.
+    previous = sys.dont_write_bytecode
+    sys.dont_write_bytecode = True
+    try:
+        spec.loader.exec_module(module)
+    finally:
+        sys.dont_write_bytecode = previous
     return module
 
 
