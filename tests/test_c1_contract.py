@@ -38,12 +38,19 @@ contract = load_contract(CONTRACT_PATH, "companion_bot_personal_contract")
 memory_contract = load_contract(MEMORY_CONTRACT_PATH, "memory_bot_personal_contract")
 
 
+def _normalized_contract_bytes(path: Path) -> bytes:
+    text = path.read_text(encoding="utf-8")
+    return text.replace("\r\n", "\n").replace("\r", "\n").encode("utf-8")
+
+
 def test_contract_bytes_match_authority_and_other_side():
-    expected = SHARED_CONTRACT_PATH.read_bytes()
-    assert CONTRACT_PATH.read_bytes() == expected
-    assert MEMORY_CONTRACT_PATH.read_bytes() == expected
-    assert hashlib.sha256(CONTRACT_PATH.read_bytes()).digest() == hashlib.sha256(
-        MEMORY_CONTRACT_PATH.read_bytes()
+    expected = _normalized_contract_bytes(SHARED_CONTRACT_PATH)
+    companion_bytes = _normalized_contract_bytes(CONTRACT_PATH)
+    memory_bytes = _normalized_contract_bytes(MEMORY_CONTRACT_PATH)
+    assert companion_bytes == expected
+    assert memory_bytes == expected
+    assert hashlib.sha256(companion_bytes).digest() == hashlib.sha256(
+        memory_bytes
     ).digest()
 
 

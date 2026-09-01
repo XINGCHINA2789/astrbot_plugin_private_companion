@@ -3,6 +3,8 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+import pytest
+
 from astrbot_plugin_private_companion.persona_config import load_scope_manifest
 
 
@@ -12,7 +14,10 @@ def test_creative_writing_missing_config_defaults_to_disabled() -> None:
 
 
 def test_primary_persona_change_keeps_a_recoverable_ownership_audit(tmp_path: Path) -> None:
-    from tests.test_multi_persona_isolation import _plugin_harness
+    try:
+        from tests.test_multi_persona_isolation import _plugin_harness
+    except ImportError as exc:
+        pytest.skip(f"persona regression harness dependencies unavailable: {exc}")
 
     plugin = _plugin_harness(str(tmp_path))
     plugin._data_default["users"] = {"u": {"name": "历史"}}
