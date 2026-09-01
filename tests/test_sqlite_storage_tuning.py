@@ -33,6 +33,7 @@ def test_new_store_uses_32k_pages_bounded_cache_mmap_wal_and_normal_sync(tmp_pat
         assert _pragma(connection, "mmap_size") == 256 * 1024 * 1024
         assert str(_pragma(connection, "journal_mode")).lower() == "wal"
         assert _pragma(connection, "synchronous") == 1  # NORMAL
+        assert _pragma(connection, "wal_autocheckpoint") == 8192
     finally:
         connection.close()
 
@@ -54,6 +55,7 @@ def test_existing_store_keeps_its_page_size_without_vacuum_rewrite(tmp_path: Pat
         assert _pragma(connection, "cache_size") == -32768
         assert _pragma(connection, "mmap_size") == 256 * 1024 * 1024
         assert str(_pragma(connection, "journal_mode")).lower() == "wal"
-        assert _pragma(connection, "synchronous") == 1
+        assert _pragma(connection, "synchronous") == 1  # NORMAL
+        assert _pragma(connection, "wal_autocheckpoint") == 65536
     finally:
         connection.close()

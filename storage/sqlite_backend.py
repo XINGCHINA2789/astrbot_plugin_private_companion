@@ -30,6 +30,10 @@ _SQLITE_QUERY_BATCH_SIZE = 900
 _SQLITE_PAGE_SIZE = 32768
 _SQLITE_CACHE_SIZE_KIB = 32768
 _SQLITE_MMAP_SIZE = 256 * 1024 * 1024
+# Keep automatic WAL checkpoints at a byte-based budget. SQLite expresses the
+# threshold in pages, so using the default 1000 pages would checkpoint every
+# ~32 MiB on a 32 KiB-page database and cause frequent random-write bursts on HDDs.
+_SQLITE_WAL_AUTOCHECKPOINT_BYTES = 256 * 1024 * 1024
 _SECTION_COLUMNS = (
     "section_name",
     "payload_json",
@@ -505,6 +509,11 @@ class SqliteStoreBackend(StoreBackendBase):
                 self._ensure_schema(connection)
                 connection.execute("PRAGMA journal_mode=WAL")
                 connection.execute("PRAGMA synchronous=NORMAL")
+                page_size = int(connection.execute("PRAGMA page_size").fetchone()[0])
+                checkpoint_pages = max(
+                    1, _SQLITE_WAL_AUTOCHECKPOINT_BYTES // page_size
+                )
+                connection.execute(f"PRAGMA wal_autocheckpoint={checkpoint_pages}")
                 return connection
             except Exception:
                 connection.close()
