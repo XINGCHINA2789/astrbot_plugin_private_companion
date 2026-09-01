@@ -8083,37 +8083,6 @@ class PrivateCompanionPlugin(
 
     async def terminate(self):
         global _private_companion_plugin
-        lab_fixture_adapter = getattr(self, "_lab_fixture_adapter", None)
-        close_lab_fixture = getattr(lab_fixture_adapter, "close", None)
-        if callable(close_lab_fixture):
-            try:
-                close_lab_fixture()
-            except Exception as exc:
-                logger.warning(
-                    "LAB fixture 门控清理失败，继续关闭插件: %s",
-                    type(exc).__name__,
-                )
-        self._lab_fixture_adapter = None
-        close_extension = getattr(
-            getattr(self, "extension_api", None),
-            "_close_story_migration_api",
-            None,
-        )
-        if callable(close_extension):
-            close_extension()
-        self._stop_event.set()
-        standalone_webui = getattr(self, "standalone_webui", None)
-        if standalone_webui is not None:
-            try:
-                await standalone_webui.stop()
-            except Exception as exc:
-                logger.warning(
-                    "独立陪伴 WebUI 停止失败: %s",
-                    _single_line(exc, 160),
-                )
-        cleanup_delivery_caches = getattr(self, "_cleanup_framework_delivery_caches", None)
-        if callable(cleanup_delivery_caches):
-            cleanup_delivery_caches(force=True)
         await close_early_resources(self)
         await self._cancel_lifecycle_background_tasks()
         invalidate_bridge = getattr(self, "_memory_companion_invalidate_bridge_cache", None)
